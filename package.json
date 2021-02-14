@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "name": "uotterbot",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "discord.js": "^12.5.1",
+        "got": "^11.8.1",
+        "once": "^1.4.0",
+        "ws": "^7.4.3"
+    },
+    "scripts": {
+        "start": "node index.js"
+    }
+}
