@@ -1,0 +1,239 @@
+{
+  "startup": "/em is now running!",
+  "discordStartup": "`Bot is now running!`",
+  "exceedstimeguard": "your media exceeds the defined maximum length (6m30s)!",
+  "blacklisted": "your media is Blacklisted!",
+  "overplayed": "your media is Overplayed!",
+  "advanceprops": "%%USER%% got %%PROPS%% prop%%PLURAL%% for the song they just played.",
+  "advanceholiday": "%%USER%% got %%RANDOM%% :fplcandy: for the theme song played.",
+  "pointsMilestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
+  "mehSkip": "your media received too many Mehs.",
+  "stuckSkip": "Song stuck, force skipping...",
+  "historySkip": "Song played %%TIME%%, skipping...",
+  "maybeHistorySkip": "https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Song in history?",
+  "blocked": "The song is blocked in too many countries. See: http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=%%LINK%%",
+  "lotteryWinner": "@%%WINNER%% won the lottery! Type !accept to be moved to position %%POSITION%%.",
+  "notAccepted": "Position not accepted! Giving it to someone else...",
+  "rdjPromoted": "%%USER%% has enough points and was gifted with the RDJ Role. Congratulations.",
+  "rdjDemoted": "%%USER%% lost too many points and the RDJ Role.",
+  "points": {
+    "milestone": "%%USER%% has reached 30,000 XP and for that, they were rewarded the Resident DJ role.",
+    "alreadyStaff": "%%USER%% already has a staff role higher than Resident DJ but congratz on them for reaching 30,000 XP!"
+  },
+  "commands": {
+    "default": "[!%%COMMAND%%] [%%USER%%] %%MESSAGE%%",
+    "kill": "Shutting down.. :(",
+    "rules": "You can read the Rules here: https://edmspot.ml/rules %%MENTION%%",
+    "rdj": "Read about the Resident DJ role here: https://git.io/fNzo0 %%MENTION%%",
+    "waitlist": "How to queue a song: https://i.imgur.com/SdazrBO.png %%MENTION%%",
+    "shush": "https://i.imgur.com/05NVq0h.png %%MENTION%%",
+    "clear": "To help reduce lag, you can clear your chat with /clear, and reduce the avatars displayed with /cap 1. %%MENTION%%",
+    "catfact": "%%CATFACT%% :smartcat:",
+    "catfactfail": "sorry.. I couldn't get you a cat fact..",
+    "urban": "%%TEXT%%",
+    "gif": "%%URL%%",
+    "sodas": "%%SODAS%% :sodas:",
+    "genre": "Genres: %%GENRES%%",
+    "rcs": "Want custom emotes and more customizability for plug.dj? Get the RCS Extension/Script! https://rcs.radiant.dj %%MENTION%%",
+    "emotes": "You can find the emotes here: https://rcs.radiant.dj/emotes / https://emotes.tastycat.org / https://www.twitchmetrics.net/emotes %%MENTION%%",
+    "myID": "Your ID is %%ID%%",
+    "joined": "You Joined this community %%JOINED%%",
+    "discord": "Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC",
+    "app": "plug.dj has Official apps for both iOS and Android! Check out their Blog post: https://blog.plug.dj/2017/03/mobile-app-release/ %%MENTION%%",
+    "xp": "you have %%POINTS%% XP!",
+    "cantUnlock": "There are users waiting to be added so I cannot unlock the wait list right now.",
+    "userNotFound": "The specified user was not found.",
+    "invalidUser": "You specified an invalid user.",
+    "commands": "Command List: https://edmspot.ml/plugCommands %%MENTION%%",
+    "noPromo": "",
+    "faq": "Frequently Asked Questions: https://edmspot.ml/faq %%MENTION%%",
+    "mehRule": "The current song needs %%MEHS%% Mehs to be skipped or %%HSMEHS%% if it's Hardstyle/Hardcore!",
+    "ping": {
+      "ping": "Pong!",
+      "pong": "Ping?",
+      "marco": "Polo!"
+    },
+    "song": {
+      "nothingPlaying": "There is no media playing right now!",
+      "link": "The link to the current media is: %%LINK%%"
+    },
+    "props": {
+      "nothingPlaying": "There is no song playing to prop!",
+      "propSelf": "We know you love your song, but let others also prop you!",
+      "noPropsToGive": "You don't have more props to give today!"
+    },
+    "myprops": {
+      "result": "You have %%PROPS%% prop(s).",
+      "given": "You have given away %%PROPS%% prop%%PLURAL%%!",
+      "noneGiven": "You have not given props to anyone yet! Use !props to do so.",
+      "noProps": "You don't have any props! Play a song to get some."
+    },
+    "myevent": {
+      "result": "You have %%CURRENCY%% :fplcandy:",
+      "noCurrency": "You don't have any :fplcandy:! Play a THEME song to get some."
+    },
+    "myrank": {
+      "result": "You're currently ranked at position %%RANK%%."
+    },
+    "roulette": {
+      "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
+      "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
+      "started": "A Game is already running right now!",
+      "notRunning": "I'm not running a roulette right now.",
+      "stopped": "Hold your typing! The roulette was interrupted.",
+      "starting": "@djs Roulette is starting! Use !join to play!",
+      "startingWeekend": "FREE Weekends enabled. Enjoy!",
+      "invalidPrice": "The price specified is invalid.",
+      "invalidDuration": "The duration specified is invalid.",
+      "invalidWaitlist": "Can't start a roulette with the Waitlist Lower than 15.",
+      "info": "The roulette ends in %%DURATION%% seconds, and the price to enter is %%PRICE%%!",
+      "free": "FREE",
+      "error": "I don't know what happened.. But I could not start a roulette.",
+      "reset": "The cooldown for the roulette has been reset!",
+      "onCooldown": "Hold on! The last roulette was %%ELAPSED%% minute(s) ago, you must wait %%REMAINING%% minute(s) to start another roulette.",
+      "outOfCooldown": "It's been over an hour since the last roulette! Go ahead and start one."
+    },
+    "russianroulette": {
+      "noParams": "You didn't specify any parameters! You can use: check, start, end, reset",
+      "invalidParam": "You specified an invalid parameter! You can use: check, start, end, reset",
+      "started": "A Game is already running right now!",
+      "notRunning": "I'm not running a russian roulette right now.",
+      "stopped": "Hold your typing! The russian roulette was interrupted.",
+      "starting": "@djs A Russian Roulette is starting! Use !join to play! Join at your OWN RISK!",
+      "startingWeekend": "FREE Weekends enabled. Enjoy!",
+      "invalidPrice": "The price specified is invalid.",
+      "invalidDuration": "The duration specified is invalid.",
+      "invalidWaitlist": "Can't start a russian roulette with the Waitlist Lower than 25.",
+      "info": "The Russian Roulette ends in %%DURATION%% seconds, and the price to enter is %%PRICE%%!",
+      "free": "FREE",
+      "error": "I don't know what happened.. But I could not start a russian roulette.",
+      "reset": "The cooldown for the russian roulette has been reset!",
+      "onCooldown": "Hold on! The last russian roulette was %%ELAPSED%% minute(s) ago, you must wait %%REMAINING%% minute(s) to start another russian roulette.",
+      "outOfCooldown": "It's been over an hour since the last russian roulette! Go ahead and start one."
+    },
+    "join": {
+      "noRoulette": "There is no roulette running right now.",
+      "noProps": "You do not have enough props to join. Play a song to get some.",
+      "isPlaying": "You can't play the roulette while DJing!",
+      "closeToPlaying": "You're too close to DJing to join!"
+    },
+    "propsShop": {
+      "noProps": "You do not have enough props!",
+      "imageSize": "Badge Image should be 65x65 px",
+      "imageType": "Image Extension should be jpg, png or gif.",
+      "imageRDJ": "GIF Bagde is only avaiable to RDJ+."
+    },
+    "eventShop": {
+      "noCandies": "You do not have enough candies!",
+      "imageSize": "Badge Image should be 65x65 px",
+      "imageType": "Image Extension should be jpg, png or gif.",
+      "imageRDJ": "GIF Bagde is only avaiable to RDJ+."
+    },
+    "dc": {
+      "noRecentDisconnection": "You haven't disconnected recently.",
+      "isPlaying": "You cannot use !dc while you're DJing.",
+      "waitlistSmaller": "The Wait List is smaller than when you disconnected, so you will only be added.",
+      "sameOrLower": "Your saved disconnection is the at the same, or a lower position than you're currently on.",
+      "placeBack": "You have disconnected at position %%POSITION%%. You will be added %%WHEN%%.",
+      "whenPossible": "when a spot frees up on the wait list",
+      "now": "now"
+    },
+    "eta": {
+      "isPlaying": "You're the current DJ!",
+      "notInWaitList": "You're not on the list.",
+      "isNext": "You're the next DJ!",
+      "result": "You'll be the DJ in %%ETA%%"
+    },
+    "moderation": {
+      "isPlaying": "the user specified is currently playing and cannot be added!",
+      "effective": "%%MOD%% used %%COMMAND%% on %%USER%%. It was super effective!",
+      "add": "%%MOD%% added %%USER%% to the Wait List.",
+      "onStaff": "You can't do that, talk with a higher rank.",
+      "onSelf": "Why are you trying to %%COMMAND%% yourself?",
+      "needReason": "You need to specify a reason!"
+    },
+    "check": {
+      "notYouTube": "The currently playing media is not from YouTube.",
+      "noMedia": "There is no media currently playing.",
+      "invalidYoutubeLink": "Invalid YouTube link.",
+      "valid": "%%TITLE%% seems good to be played!",
+      "mediaUnavailable": "The %%WHICH%% media seems to be unavailable.",
+      "plausible": "Something seems wrong with that media, I'd avoid playing it.",
+      "blockedTooMany": "The %%WHICH%% media is blocked in too many countries (%%COUNT%%).",
+      "blockedIn": "The %%WHICH%% media is blocked on %%COUNTRIES%% countries.",
+      "allowedOnlyIn": "The %%WHICH%% media is only allowed on: %%COUNTRIES%%",
+      "sendLink": "You can check it here https://polsy.org.uk/stuff/ytrestrict.cgi?ytid="
+    },
+    "cookie": [
+      "%%RECEIVER%%, %%SENDER%% baked you a simple cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a chocolate chip cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you a sugar cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a peanut butter cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you a heart shaped cookie.",
+      "%%RECEIVER%%, %%SENDER%% throws you an oreo.",
+      "%%RECEIVER%%, %%SENDER%% baked you a dozen vanilla cookies.",
+      "%%RECEIVER%%, %%SENDER%% gifted you a strawberry flavored cookie.",
+      "%%RECEIVER%%, %%SENDER%% hands you an apple flavored cookie.",
+      "%%RECEIVER%%, %%SENDER%% baked you a honey flavored cookie."
+    ],
+    "plays": {
+      "current": "current",
+      "specified": "specified",
+      "nothingPlaying": "There is no media playing.",
+      "lastPlayWas": "The %%WHICH%% media has been played %%COUNT%% times and was last played %%TIME%%",
+      "lastPlaySkippedWas": "The %%WHICH%% media has been played %%TIME%% but was skipped.",
+      "maybeLastPlayWas": "https://www.youtube.com/watch?v=%%CID%% played %%TIME%%. Same Song?",
+      "invalidLink": "The link specified is invalid.",
+      "neverPlayed": "The %%WHICH%% media was never played."
+    },
+    "blacklist": {
+      "nothingPlaying": "There is no media playing.",
+      "currentAdded": "Current song blacklisted!",
+      "linkAdded": "Song added to the blacklist!",
+      "invalidLink": "The link specified is invalid.",
+      "deleted": "Song deleted from blacklist!"
+    },
+    "move": {
+      "isPlaying": "the user specified is currently playing and cannot be added!",
+      "invalidPosition": "Invalid position.",
+      "willMove": "%%USER%% will be moved to %%POSITION%% %%WHEN%%.",
+      "whenPossible": "when a spot frees up on the wait list",
+      "now": "now"
+    },
+    "queue": {
+      "cleared": "The queue was cleared.",
+      "current": "Current queue: %%USERS%%",
+      "empty": " The queue is empty."
+    },
+    "give": {
+      "notInList": "Both need to be in the waitlist.",
+      "behindPosition": "You are behind in the waitlist.",
+      "cantGiveAgain": " You can't give more than one time.",
+      "isGiving": "@%%TOUSER%% this user wants to give you his position %%POSITION%% in the waitlist. Type !accept to swap positions."
+    }
+  },
+  "roulette": {
+    "noplayers": "No one joined the roulette, therefore no winner was picked.",
+    "somethingwrong": "Something went wrong while picking a roulette winner.",
+    "winner": "@%%WINNER%% won the roulette!!! They will be moved to %%POSITION%%."
+  },
+  "russianroulette": {
+    "noplayers": "No one joined the roulette, therefore no winner was picked.",
+    "countOver": "The russian roulette is over.",
+    "chicken": "The user %%USER%% runned away! :chicken: Removing DC position!",
+    "shot": "@%%USER%% pulled the trigger...",
+    "luckyshot": "/em @%%USER%% survived! :feelsgoodman:",
+    "unluckyshot": "/em :otterarage::bulletgun::tfw::quinsplat: BANG! @%%USER%%"
+  },
+  "queue": {
+    "roomMismatch": "%%USER%% could not be added to the wait list since they're apparently in another room..",
+    "noValidPlaylist": "You can't be added to the waitlist without an active playlist with at least one song in it.",
+    "waitlistBan": "you're waitlist banned so you cannot win a roulette position. Cooldown was reset."
+  },
+  "misc": {
+    "loaded_lowercase": "loaded",
+    "unloaded_lowercase": "unloaded",
+    "verb_is_singular": "is",
+    "verb_is_plural": "are"
+  }
+}
