@@ -6,7 +6,7 @@ module.exports = function Util(bot) {
       this.users = [];
       this.shouldUnlock = true;
 
-      bot.socketEvents.on("waitlistUpdate", this.run);
+      //bot.socketEvents.on("waitlistUpdate", this.run);
     }
     add(user, position) {
       position = position - 1;

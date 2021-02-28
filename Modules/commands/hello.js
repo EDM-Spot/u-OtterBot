@@ -6,7 +6,7 @@ module.exports = function Command(bot) {
     cooldownDuration: 120,
     parameters: "",
     description: "Hello...",
-    async execute(rawData) {
+    async execute(rawData) {   
       const lucky = !Math.floor(Math.random() * 50);
 
       if (lucky) {

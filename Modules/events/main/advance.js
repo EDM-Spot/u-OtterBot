@@ -13,7 +13,6 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (next) => {
-      console.log(next);
       return;
       if (!isObject(next) || !isObject(next.media) || !isObject(next.user)) return;
 
@@ -468,7 +467,7 @@ module.exports = function Event(bot, filename, platform) {
       }
     },
     init() {
-      bot.socketEvents.on('advance', this.run);
+      bot.socketEvents.on(this.name, this.run);
     },
     kill() {
       bot.socketEvents.removeListener(this.name, this.run);

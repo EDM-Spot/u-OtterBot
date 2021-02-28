@@ -43,6 +43,9 @@ class Bot extends Discord.Client {
 
     this.socketEvents = new EventEmitter();
 
+    this.users;
+    this.self;
+
     this.sequelize = Sequelize;
     this.moment = require("moment");
 
@@ -103,7 +106,7 @@ class Bot extends Discord.Client {
             resolve();
           });
 
-          this.socket.on("message", this.onSocketMessage);
+          this.socket.on("message", this.onSocketMessage.bind(this));
 
           const reconnect = once(() => {
             console.log("reconnecting in 1000ms");
@@ -164,19 +167,26 @@ class Bot extends Discord.Client {
   }
 
   async getNow() {
-    const { body } = await axios.get(`${API_URL}/${API_NOW}`);
-    this.users = body.users.map(this.toBotUser, this);
-    this.self = this.toBotUser(body.user);
-    this.waitlist.waitlist = body.waitlist;
-    return body;
+    const body = await axios.get(`${API_URL}/${API_NOW}`);
+    this.users = body.data.users;
+    this.self = body.data.user;
+    return body.data;
   }
 
   getSelf() {
     return this.self;
   }
 
-  getUsers() {
+  async getUsers() {
+    await this.getNow();
+
     return this.users;
+  }
+
+  async getUser(id) {
+    const users = await this.getUsers();
+    
+    return users.find((user) => user._id === id);
   }
 
   /*
@@ -457,14 +467,14 @@ client.socketEvents.on("disconnected", () => {
 // <String>.toPropercase() returns a proper-cased string such as: 
 // "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
 Object.defineProperty(String.prototype, "toProperCase", {
-  value: function() {
+  value: function () {
     return this.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   }
 });
 // <Array>.random() returns a single random element from an array
 // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
 Object.defineProperty(Array.prototype, "random", {
-  value: function() {
+  value: function () {
     return this[Math.floor(Math.random() * this.length)];
   }
 });

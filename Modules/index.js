@@ -7,7 +7,7 @@ const Utils = require("./utils");
 module.exports = function ModuleManager(bot) {
   bot.Classes = Classes;
   bot.utils = new Utils(bot);
-  bot.events = new Events(bot, ["plug"]);
+  bot.events = new Events(bot, ["main"]);
   bot.uCommands = new uCommands(bot);
   bot.models = new Models(bot, bot.sequelize);
 
