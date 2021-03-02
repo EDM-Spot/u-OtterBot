@@ -19,8 +19,13 @@ module.exports = (client) => {
       if (currentDJ.media.sourceType === "youtube") {
         const url = `https://www.youtube.com/watch?v=${currentDJ.media.sourceID}`;
 
+        const startDate = new Date(currentDJ.playedAt);
+        const endDate   = new Date();
+
+        const seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+
         const dataStream = await ytdl(url, {
-          begin: 0 + "s",
+          begin: seconds + "s",
           quality: "highestaudio",
           highWaterMark: 1 << 25
         });
