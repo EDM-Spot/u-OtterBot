@@ -59,12 +59,6 @@ module.exports = (client) => {
         return;
       }
 
-      const userDB = await client.db.models.users.findOne({
-        where: {
-          discord: victim,
-        },
-      });
-
       await client.wait(3000);
 
       client.channels.cache.get(this.channel).send(`${user} pulled the trigger...`);
@@ -78,7 +72,7 @@ module.exports = (client) => {
 
         client.channels.cache.get(this.channel).send(`${user} survived! Won ${playerBet.bet * 2} Props. <:FeelsGoodMan:486184925859545088>`);
 
-        await userDB.increment("props", { by: playerBet.bet * 2 });
+        //await user.increment("props", { by: playerBet.bet * 2 });
       } else {
         client.channels.cache.get(this.channel).send(`<:otterrage:511579983668314122><:bulletgun:698190275503456278><:FeelsBadMan:486181331395411969><:quinsplat:698195042220769401> BANG! ${user}`);
       }

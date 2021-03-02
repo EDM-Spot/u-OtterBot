@@ -1,4 +1,4 @@
-const { each, isObject, get } = require("lodash");
+const { each, isNil, get } = require("lodash");
 
 module.exports = function Util(bot) {
   class Queue {
@@ -6,12 +6,13 @@ module.exports = function Util(bot) {
       this.users = [];
       this.shouldUnlock = true;
 
-      //bot.socketEvents.on("waitlistUpdate", this.run);
+      bot.socketEvents.on("waitlistUpdate", this.run);
     }
     add(user, position) {
+      //console.log(user);
       position = position - 1;
 
-      if (this.users.map(u => u.user.id).includes(user.id)) {
+      if (this.users.map(u => u.user._id).includes(user._id)) {
         return this.update(user, position);
       }
 
@@ -20,8 +21,9 @@ module.exports = function Util(bot) {
       return this.run();
     }
     update(user, position) {
+      //console.log(user);
       each(this.users, (queueUser) => {
-        if (queueUser.user.id === user.id) {
+        if (queueUser.user._id === user._id) {
           queueUser.position = position;
         }
       });
@@ -29,8 +31,9 @@ module.exports = function Util(bot) {
       return this.run();
     }
     remove(user) {
+      //console.log(user);
       each(this.users, (queueUser, index) => {
-        if (queueUser.user.id === user.id) {
+        if (queueUser.user._id === user._id) {
           this.users.splice(index, 1);
         }
       });
@@ -38,12 +41,18 @@ module.exports = function Util(bot) {
       return this.run();
     }
     async run() {
-      const waitlist = bot.plug.waitlist();
-      const dj = bot.plug.dj();
+      const waitlist = await bot.getWaitlist();
+      const dj = await bot.getDj();
+
+      if (isNil(this.users)) {
+        this.users = [];
+      }
 
       if (!this.users.length) {
         if (this.shouldUnlock) {
-          await bot.plug.setLock(false);
+          if (await bot.isLocked()) {
+            await bot.setLock(); //false
+          }
           this.shouldUnlock = false;
         }
 
@@ -52,10 +61,10 @@ module.exports = function Util(bot) {
 
       const next = this.users.shift();
 
-      if (waitlist.length === 50 && !waitlist.contains(next.user.id)) {
-        if (!bot.plug.isLocked()) {
+      if (waitlist.length === 50 && !waitlist.contains(next.user._id)) {
+        if (!await bot.isLocked()) {
           try {
-            await bot.plug.setLock(true);
+            await bot.setLock(); // true
             this.shouldUnlock = true;
           } catch (err) {
             console.warn("setLock Error!");
@@ -67,20 +76,20 @@ module.exports = function Util(bot) {
         }
       }
 
-      if (isObject(dj) && dj.id === next.user.id) {
+      if (!isNil(dj) && dj._id === next.user._id) {
         this.users.push(next);
         return;
-      } else if (waitlist.positionOf(next.user.id) === -1) {
+      } else if (waitlist.positionOf(next.user._id) === -1) {
         try {
           await next.user.add();
         } catch (err) {
           if (get(err, "response.body.status")) {
             switch (get(err, "response.body.status")) {
               case "noValidPlaylist":
-                bot.plug.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist).delay(6e4).call("delete");
+                bot.chat(`@${next.user.username} ` + bot.lang.en.queue.noValidPlaylist); //.delay(6e4).call("delete");
                 return;
               case "roomMismatch":
-                bot.plug.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user.id })).delay(6e4).call("delete");
+                bot.chat(bot.utils.replace(bot.lang.queue.roomMismatch, { user: next.user._id })); //.delay(6e4).call("delete");
                 return;
               // to-do: handle wait list banned users
               default:
@@ -110,13 +119,17 @@ module.exports = function Util(bot) {
         }
 
         if (this.shouldUnlock) {
-          await bot.plug.setLock(false);
+          if (await bot.isLocked()) {
+            await bot.setLock(); //false
+          }
           this.shouldUnlock = false;
         }
       }
 
       if (this.shouldUnlock) {
-        await bot.plug.setLock(false);
+        if (await bot.isLocked()) {
+          await bot.setLock(); //false
+        }
         this.shouldUnlock = false;
       }
     }

@@ -1,7 +1,7 @@
 // The MESSAGE event runs anytime a message is received
 // Note that due to the binding of client to every event, every event
 // goes `client, other, args` when this function is run.
-const { isNil } = require("lodash");
+const { isObject, isNil } = require("lodash");
 
 module.exports = class {
   constructor(client) {
@@ -30,17 +30,13 @@ module.exports = class {
       "487337286128893972"
     ];
 
-    if (allowedChannels.includes(message.channel.id)) {
-      const userID = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+    //if (allowedChannels.includes(message.channel.id)) {
+      //const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (!isNil(userID)) {
-        await this.client.db.models.users.increment("points", { by: 1, where: { discord: message.author.id } });
-      }
-    }
+      //if (isObject(user)) {
+        //await this.client.db.models.users.increment("points", { by: 1, where: { discord: message.author.id } });
+      //}
+    //}
 
     // Grab the settings for this server from the Enmap
     // If there is no guild, get default conf (DMs)
@@ -69,14 +65,10 @@ module.exports = class {
     const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
 
     if (message.channel.id === "695987344280649839") {
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+      const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (!isNil(userDB) && !cmd) {
-        //this.client.plug.chat(userDB.get("username") + ": " + message.cleanContent);
+      if (isObject(user) && !cmd) {
+        this.client.chat(user.username + ": " + message.cleanContent);
       }
     }
 

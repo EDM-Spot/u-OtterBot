@@ -4,6 +4,8 @@ module.exports = function Util(bot) {
   const util = {
     name: "getSongHistory",
     function: async (songAuthor, songTitle, cid) => {
+      return;
+      
       if (isNil(cid)) return;
 
       const songHistory = await bot.db.models.plays.findAll({

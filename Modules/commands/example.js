@@ -2,7 +2,7 @@ module.exports = function Command(bot) {
   return;
 
   /* eslint-disable no-unreachable */
-  bot.uCommands.register({
+  bot.commands.register({
     names: ["example"],
     /*
 			5 (host);

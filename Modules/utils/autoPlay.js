@@ -10,12 +10,14 @@ module.exports = function Util(bot) {
       this.key = bot.config.youtube2;
     }
     async updatePlaylist() {
+      return;
+      
       waitsDone = 0;
       countWaits = 0;
 
-      bot.plug.leaveWaitlist();
+      await bot.leaveWaitlist();
 
-      each(await bot.plug.getPlaylists(), (playlist) => {
+      each(await bot.getPlaylists(), (playlist) => {
         return Promise.all([
           playlist.delete()
         ]);

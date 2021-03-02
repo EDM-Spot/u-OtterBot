@@ -1,7 +1,7 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/slots.js
 const Command = require("../base/Command.js");
 const Discord = require("discord.js");
-const { isNil, isNaN, isObject } = require("lodash");
+const { isNaN, isObject } = require("lodash");
 const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
@@ -30,7 +30,6 @@ class Slots extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
     try {
       //message.delete();
       
@@ -48,28 +47,22 @@ class Slots extends Command {
         return false;
       }
 
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+      const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (isNil(userDB)) {
+      if (!isObject(user)) {
         return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
       }
 
-      const user = this.client.plug.user(userDB.get("id"));
+      //const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
 
-      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
+      //const props = inst.get("props");
 
-      const props = inst.get("props");
+      //if (props < price) {
+        //return message.reply("You don't have enough props.");
+      //}
 
-      if (props < price) {
-        return message.reply("You don't have enough props.");
-      }
-
-      await inst.decrement("props", { by: price });
-      await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
+      //await inst.decrement("props", { by: price });
+      //await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
       const machine = new SlotMachine(3, symbols);
       const results = machine.play();
@@ -79,8 +72,8 @@ class Slots extends Command {
       let moveDown2 = false;
       let wonJackPot = false;
 
-      const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
-      const jackpot = botUser.get("props");
+      //const [botUser] = await this.client.db.models.users.findOrCreate({ where: { id: "40333310" }, defaults: { id: "40333310" } });
+      const jackpot = "OMEGALUL";
 
       message.channel.send("Current JackPot: " + jackpot + " Props");
 
@@ -144,41 +137,41 @@ class Slots extends Command {
       embed.setFooter(message.author.username, `${message.author.displayAvatarURL()}`);
       embed.setColor("#e6f90e");
 
-      await inst.increment("props", { by: payout });
+      //await inst.increment("props", { by: payout });
 
       if (moveTo3 || moveDown5 || moveDown2) {
-        const dj = this.client.plug.dj();
-        const userPos = this.client.plug.waitlist().positionOf(userDB.get("id")) + 1;
+        const dj = this.client.getDj();
+        const userPos = this.client.getWaitlistPos(user.id);
 
         if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
-          message.reply("You're not online on plug! Can't Move.");
-        } else if (isObject(dj) && dj.id !== user.id) {
+          message.reply("You're not online! Can't Move.");
+        } else if (isObject(dj) && dj.user._id !== user._id) {
           if (moveTo3 && userPos >= 4) {
-            this.client.plug.chat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
+            this.client.chat("@" + user.username + " Won Spot 3 in the Slot Machine! Moving to 3...");
 
             this.client.queue.add(user, 3);
           } else if (moveDown5 && userPos >= 6) {
-            this.client.plug.chat("@" + user.username + " Won 5 Spots in the Slot Machine! Moving Down 5...");
+            this.client.chat("@" + user.username + " Won 5 Spots in the Slot Machine! Moving Down 5...");
 
             this.client.queue.add(user, userPos - 5);
           } else if (moveDown2 && userPos >= 3) {
-            this.client.plug.chat("@" + user.username + " Won 2 Spots in the Slot Machine! Moving Down 2...");
+            this.client.chat("@" + user.username + " Won 2 Spots in the Slot Machine! Moving Down 2...");
 
             this.client.queue.add(user, userPos - 2);
           }
         }
       }
 
-      const banCount = await this.client.db.models.bans.count({
-        where: { id: userDB.get("id") }
-      });
+      //const banCount = await this.client.db.models.bans.count({
+        //where: { id: userDB.get("id") }
+      //});
 
-      if (wonJackPot && banCount == 0) {
-        await inst.increment("props", { by: jackpot });
-        await botUser.decrement("props", { by: jackpot });
+      //if (wonJackPot && banCount == 0) {
+        //await inst.increment("props", { by: jackpot });
+        //await botUser.decrement("props", { by: jackpot });
 
-        message.channel.send("Congratulation!!! You won the JackPot!");
-      }
+        //message.channel.send("Congratulation!!! You won the JackPot!");
+      //}
 
       await this.client.redis.placeCommandOnCooldown("discord", "slots@play", "perUser", message.author.id, 10);
 

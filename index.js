@@ -5,7 +5,6 @@ if (Number(process.version.slice(1).split(".")[0]) < 12) throw new Error("Node 1
 
 // Load up the discord.js library
 const Discord = require("discord.js");
-
 const WebSocket = require("ws");
 const EventEmitter = require("events");
 
@@ -18,7 +17,9 @@ const path = require("path");
 const once = require("once");
 const axios = require("axios");
 const Redis = require("ioredis");
-const Sequelize = require("sequelize");
+const Mongoose = require("mongoose");
+Mongoose.Promise = Promise;
+
 const ModuleManager = require("./Modules");
 
 const Deck = require("./util/poker/deck.js");
@@ -28,7 +29,6 @@ const SOCKET_URL = "wss://edmspot.ml";
 
 const AUTH_LOGIN = "auth/login";
 const AUTH_SOCKET = "auth/socket";
-const API_NOW = "now";
 
 class Bot extends Discord.Client {
   constructor(options) {
@@ -43,10 +43,10 @@ class Bot extends Discord.Client {
 
     this.socketEvents = new EventEmitter();
 
-    this.users;
     this.self;
 
-    this.sequelize = Sequelize;
+    this.mongoose = Mongoose;
+
     this.moment = require("moment");
 
     this.lang = require("./Modules/data/lang.json");
@@ -54,19 +54,12 @@ class Bot extends Discord.Client {
     this.models = {};
 
     this.Redis = new Redis(this.config.db.redis);
-    this.db = new Sequelize(Object.assign(this.config.db.sequelize, {
-      logging: false,
-      define: {
-        timestamps: true,
-        underscored: true,
-      },
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000,
-        acquire: 30000
-      }
-    }));
+    this.db = this.mongoose.createConnection(this.config.db.mongo, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true
+    });
 
     // Aliases and commands are put in collections where they can be read from,
     // catalogued, listed, etc.
@@ -166,27 +159,89 @@ class Bot extends Discord.Client {
     this.socket.send(message);
   }
 
-  async getNow() {
-    const body = await axios.get(`${API_URL}/${API_NOW}`);
-    this.users = body.data.users;
-    this.self = body.data.user;
-    return body.data;
-  }
+  async getSelf() {
+    const body = await axios.get(`${API_URL}/users/60247370d5cc5241eabcb1e7`);
 
-  getSelf() {
-    return this.self;
+    return body.data.user;
   }
 
   async getUsers() {
-    await this.getNow();
+    const body = await axios.get(`${API_URL}/now`);
 
-    return this.users;
+    return body.data.users;
   }
 
   async getUser(id) {
+    const body = await axios.get(`${API_URL}/users/${id}`);
+
+    return body.data.data;
+  }
+
+  async getUserbyDiscord(id) {
     const users = await this.getUsers();
-    
-    return users.find((user) => user._id === id);
+
+    return users.find((user) => user.discordId === id);
+  }
+
+  async getDj() {
+    const body = await axios.get(`${API_URL}/booth`);
+    const user = await this.getUser(body.data.data.userID);
+
+    body.data.data.media.user = user;
+
+    return body.data.data.media;
+  }
+
+  async getWaitlist() {
+    const body = await axios.get(`${API_URL}/waitlist`);
+
+    return body.data.data;
+  }
+
+  async getWaitlistPos(id) {
+    const waitlist = await this.getWaitlist();
+
+    return waitlist.find((user) => user._id === id);
+  }
+
+  async delete(id) {
+    return await axios.delete(`${API_URL}/chat/${id}`);
+  }
+
+  async skip() {
+    return await axios.post(`${API_URL}/booth/skip`);
+  }
+
+  async leaveWaitlist() {
+    return await axios.delete(`${API_URL}/waitlist/60247370d5cc5241eabcb1e7`);
+  }
+
+  async getPlaylists() {
+    const body = await axios.get(`${API_URL}/playlists`);
+
+    return body.data.data;
+  }
+
+  async getRoomHistory() {
+    const body = await axios.get(`${API_URL}/booth/history`);
+
+    return body.data.data;
+  }
+
+  async getVotes() {
+    const body = await axios.get(`${API_URL}/now`);
+
+    return body.data.booth.stats;
+  }
+
+  async isLocked() {
+    const body = await axios.get(`${API_URL}/now`);
+
+    return body.data.waitlistLocked;
+  }
+
+  async setLock() {
+    return await axios.get(`${API_URL}/waitlist/lock`);
   }
 
   /*
@@ -384,7 +439,7 @@ const init = async () => {
       password: client.config.edmspot.password
     }).then(async response => {
       if (response.data && response.data.meta && response.data.meta.jwt) {
-        client.token = response.data.meta.jwt;
+        //client.token = response.data.meta.jwt;
         axios.defaults.headers.common["authorization"] = `JWT ${response.data.meta.jwt}`;
 
         await client.connectSocket();
@@ -437,25 +492,34 @@ client.on("shardDisconnected", (event, shardID) => client.logger.warn("Bot is di
   .on("error", e => client.logger.error(e))
   .on("warn", info => client.logger.warn(info));
 
-client.socketEvents.on("disconnected", () => {
-  console.warn("!! Connection to edmspot Lost.");
-  //reconnect();
+client.socketEvents.on("disconnected", async () => {
+  console.warn("!! Connection to EDMSpot Lost.");
+  await reconnect();
 });
 
-//let timeout = 0;
-//function reconnect() {
-//  console.info("Trying to reconnect to plug...");
-//  client.plug.connect({
-//    email: client.config.plug.email,
-//    password: client.config.plug.password
-//  }).then(() => {
-//    console.info("Reconnected to plug!");
-//  }).catch(() => {
-//    console.warn("Failed to reconnect to plug, trying again in", timeout, "ms");
-//    setTimeout(reconnect, timeout);
-//  });
-//  timeout += 1000; // 1 second
-//}
+let timeout = 0;
+async function reconnect() {
+  console.info("Trying to reconnect to EDMSpot...");
+
+  await axios.post(`${API_URL}/${AUTH_LOGIN}`, {
+    email: client.config.edmspot.email,
+    password: client.config.edmspot.password
+  }).then(async response => {
+    if (response.data && response.data.meta && response.data.meta.jwt) {
+      //client.token = response.data.meta.jwt;
+      axios.defaults.headers.common["authorization"] = `JWT ${response.data.meta.jwt}`;
+
+      await client.connectSocket();
+    } else {
+      throw new Error("Could not log in.");
+    }
+  }).catch(() => {
+    console.warn("Failed to reconnect, trying again in", timeout, "ms");
+    setTimeout(reconnect, timeout);
+  });
+
+  timeout += 1000; // 1 second
+}
 
 /* MISCELANEOUS NON-CRITICAL FUNCTIONS */
 

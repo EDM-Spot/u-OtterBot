@@ -223,8 +223,8 @@ module.exports = (client) => {
             `**${this.getPlayer(0).user.username}** wins **${this.tableMoney}** Props`
           ]);
 
-        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
-        await inst.increment("props", { by: this.tableMoney });
+        //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: this.getPlayer(0).user.id }, defaults: { discord: this.getPlayer(0).user.id } });
+        //await inst.increment("props", { by: this.tableMoney });
 
         const options = {};
 
@@ -275,10 +275,10 @@ module.exports = (client) => {
           `${winners.length.plural("They have", "Each winner has")} won **${payout}** Props`
         ]);
 
-      for (const winner of winners) {
-        const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
-        await inst.increment("props", { by: payout });
-      }
+      //for (const winner of winners) {
+        //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: winner.id }, defaults: { discord: winner.id } });
+        //await inst.increment("props", { by: payout });
+      //}
 
       embed.addField("Hands", hands.map(hand => {
         const name = client.users.cache.get(hand.player).tag;
@@ -334,8 +334,8 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      await inst.decrement("props", { by: amount });
+      //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
+      //await inst.decrement("props", { by: amount });
 
       return this.processNextTurn();
     }
@@ -401,8 +401,8 @@ module.exports = (client) => {
         `The total pool is now **${this.tableMoney}** Props`
       ]);
 
-      const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
-      await inst.decrement("props", { by: props });
+      //const [inst] = await client.db.models.users.findOrCreate({ where: { discord: player.id }, defaults: { discord: player.id } });
+      //await inst.decrement("props", { by: props });
 
       return this.processNextTurn();
     }

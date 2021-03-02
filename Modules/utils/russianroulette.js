@@ -13,7 +13,7 @@ module.exports = function Util(bot) {
       this.duration = duration;
       this.price = price;
 
-      await bot.redis.placeCommandOnCooldown("plug", "russianroulette@start", "perUse", 1, 10800);
+      await bot.redis.placeCommandOnCooldown("main", "russianroulette@start", "perUse", 1, 10800);
 
       this.timeout = setTimeout(async () => {
         await this.sort();
@@ -31,7 +31,7 @@ module.exports = function Util(bot) {
     }
     async check(cooldown) {
       if (cooldown) {
-        return bot.redis.getCommandOnCoolDown("plug", "russianroulette@start", "perUse");
+        return bot.redis.getCommandOnCoolDown("main", "russianroulette@start", "perUse");
       }
 
       return this.running;
@@ -48,17 +48,17 @@ module.exports = function Util(bot) {
       this.running = false;
 
       const victim = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.user(victim);
-      const waitlist = bot.plug.waitlist();
+      const user = await bot.getUser(victim);
+      const waitlist = await bot.getWaitlist();
 
       if (!players.length) {
-        bot.plug.chat(bot.lang.russianroulette.countOver);
+        bot.chat(bot.lang.russianroulette.countOver);
         this.end();
         return;
       }
 
       if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
-        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
+        bot.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
           user: victim,
         }));
 
@@ -68,7 +68,7 @@ module.exports = function Util(bot) {
       }
 
       await bot.wait(3000);
-      bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.shot, {
+      bot.chat(bot.utils.replace(bot.lang.russianroulette.shot, {
         user: user.username,
       }));
       await bot.wait(5000);
@@ -79,11 +79,11 @@ module.exports = function Util(bot) {
       const unluckyshot = Math.floor(Math.random() * (waitlist.length - waitlist.positionOf(victim)) + waitlist.positionOf(victim) + 1);
 
       if (randomBool) {
-        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
+        bot.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
 
-        if (waitlist.positionOf(victim) === -1) {
+        if (await bot.getWaitlistPos(victim) === -1) {
           bot.queue.add(user, waitlist.length);
 
           this.chooseVictim(players.filter(player => player !== victim));
@@ -92,11 +92,11 @@ module.exports = function Util(bot) {
 
         bot.queue.add(user, luckyshot);
       } else {
-        bot.plug.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
+        bot.chat(bot.utils.replace(bot.lang.russianroulette.unluckyshot, {
           user: user.username,
         }));
 
-        if (waitlist.positionOf(victim) === -1) {
+        if (await bot.getWaitlistPos(victim) === -1) {
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }
@@ -109,7 +109,7 @@ module.exports = function Util(bot) {
     async sort() {
       if (this.players.length < 3) {
         this.end();
-        return bot.plug.chat(bot.lang.roulette.noplayers);
+        return bot.chat(bot.lang.roulette.noplayers);
       }
 
       this.running = false;

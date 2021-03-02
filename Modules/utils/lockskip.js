@@ -4,43 +4,44 @@ module.exports = function Util(bot) {
   const util = {
     name: "lockskip",
     function: user => new Promise((resolve, reject) => {
-      const shouldCycle = bot.plug.isCycling();
-      const waitList = bot.plug.waitlist();
-      const historyEntry = bot.plug.historyEntry();
-      const dj = bot.plug.dj();
+      return;
+
+      const shouldCycle = bot.isCycling();
+      const waitList = bot.waitlist();
+      const historyEntry = bot.getDj();
 
       const lockSkip = {
         position: 2,
         withCycle: async () => {
-          await bot.plug.enableCycle();
-          await historyEntry.skip();
+          await bot.enableCycle();
+          await bot.skip();
           await user.move(lockSkip.position);
-          await bot.plug.disableCycle();
+          await bot.disableCycle();
           return resolve();
         },
         withoutCycle: async () => {
-          await historyEntry.skip();
+          await bot.skip();
           await user.move(lockSkip.position);
           return resolve();
         },
         addingDJ: async () => {
-          await historyEntry.skip();
+          await bot.skip();
           await user.add();
           await user.move(lockSkip.position);
           return resolve();
         },
         onlySkip: async () => {
-          await historyEntry.skip();
+          await bot.skip();
           return resolve();
         },
         skipOnlyAdd: async () => {
-          await historyEntry.skip();
+          await bot.skip();
           await user.add();
           return resolve();
         },
         run: function RunLockSkip() {
           try {
-            if (!isObject(dj) || !isObject(historyEntry)) {
+            if (!isObject(historyEntry)) {
               return Promise.reject(new Error("[!] No DJ or Media playing."));
             } else if (!waitList.length && shouldCycle) {
               return this.onlySkip();

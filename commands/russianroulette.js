@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNil, isNaN, isObject } = require("lodash");
+const { isNaN, isObject } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 
@@ -14,7 +14,6 @@ class DiscordRussianRoulette extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
     try {
       //message.delete();
 
@@ -27,17 +26,11 @@ class DiscordRussianRoulette extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+      const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (isNil(userDB)) {
+      if (!isObject(user)) {
         return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
       }
-
-      const userID = userDB.get("discord");
 
       switch (param) {
         case "start": {
@@ -51,7 +44,7 @@ class DiscordRussianRoulette extends Command {
             return message.reply("There's a Game running already!");
           }
 
-          let startMessage = `A new Russian Roulette Game has been created. \n`;
+          let startMessage = "A new Russian Roulette Game has been created. \n";
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += "The game will start in 5 minute. Join the game with `-rr join <props 1-10>` \n";
           startMessage += "If you survive you win your bet props x2, if you die you lose your bet props. \n";
@@ -59,8 +52,8 @@ class DiscordRussianRoulette extends Command {
 
           message.channel.send(startMessage);
 
-          this.client.plug.chat("Discord Russian Roulette Game will start in 5 minute in channel #" + message.channel.name + "!");
-          this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+          this.client.chat("Discord Russian Roulette Game will start in 5 minute in channel #" + message.channel.name + "!");
+          this.client.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.russianRouletteUtil.running = true;
 
@@ -70,7 +63,7 @@ class DiscordRussianRoulette extends Command {
 
           new moment.duration(5, "minutes").timer({ loop: false, start: true }, async () => {
             if (this.client.russianRouletteUtil.players.length < 1) {
-              message.channel.send(`No one joined the RR.`);
+              message.channel.send("No one joined the RR.");
               await this.client.russianRouletteUtil.end();
             } else {
               message.channel.send("<@&512635547320188928> Russian Roulette will now start!");
@@ -92,7 +85,7 @@ class DiscordRussianRoulette extends Command {
             return message.reply("Russian Roulette already started!");
           }
 
-          const props = userDB.get("props");
+          //const props = userDB.get("props");
 
           const bet = parseInt(args.pop(), 10);
 
@@ -100,22 +93,22 @@ class DiscordRussianRoulette extends Command {
             return false;
           }
 
-          if (props < bet) {
-            return message.reply("You don't have enough props.");
-          }
+          //if (props < bet) {
+          //return message.reply("You don't have enough props.");
+          //}
 
-          await userDB.decrement("props", { by: bet });
-          await this.client.db.models.users.increment("props", { by: bet, where: { id: "40333310" } });
+          //await userDB.decrement("props", { by: bet });
+          //await this.client.db.models.users.increment("props", { by: bet, where: { id: "40333310" } });
 
-          this.client.russianRouletteUtil.addPlayer(userID, bet);
+          this.client.russianRouletteUtil.addPlayer(message.author.id, bet);
           await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.add("512635547320188928").catch(console.error);
 
           return message.reply("Joined Russian Roulette.");
         }
         case "reset": {
-          const user = this.client.plug.user(userDB.get("id"));
+          //const user = this.client.plug.user(userDB.get("id"));
 
-          if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
+          //if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
 
           await this.client.russianRouletteUtil.end();
           await this.client.redis.removeCommandFromCoolDown("discord", "rr@play", "perUse");

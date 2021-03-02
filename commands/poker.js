@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNil, isNaN, isObject } = require("lodash");
+const { isNaN, isObject } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 
@@ -15,7 +15,6 @@ class Poker extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
     try {
       //message.delete();
 
@@ -28,21 +27,13 @@ class Poker extends Command {
         return message.reply(`Invalid Param: ${param}`);
       }
 
-      const price = 2;
+      //const price = 2;
 
-      const userDB = await this.client.db.models.users.findOne({
-        where: {
-          discord: message.author.id,
-        },
-      });
+      const user = this.client.getUserbyDiscord(message.author.id);
 
-      if (isNil(userDB)) {
+      if (!isObject(user)) {
         return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
       }
-
-      const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });
-
-      const userID = userDB.get("discord");
 
       switch (param) {
         case "start": {
@@ -64,17 +55,17 @@ class Poker extends Command {
           const isWeekend = (day === 6) || (day === 7);
           const isDecember = (moment().month() === 11);
 
-          let price = "2 Props.";
+          //let price = "2 Props.";
 
-          if (isWeekend) {
-            price = "FREE Weekends enabled!";
-          }
+          //if (isWeekend) {
+            //price = "FREE Weekends enabled!";
+          //}
 
-          if (isDecember) {
-            price = "FREE December!";
-          }
+          //if (isDecember) {
+            //price = "FREE December!";
+          //}
 
-          let startMessage = `A new Texas Hold'em Poker Game has been created. Entry Fee: ${priceD} \n`;
+          let startMessage = `A new Texas Hold'em Poker Game has been created. Entry Fee: ${0} \n`;
           startMessage += "You will be warned 30 seconds before it starts. \n";
           startMessage += `A maximum of ${this.client.pokerUtil.maxPlayers} players can play. \n`;
           startMessage += "The game will start in 5 minute. Join the game with `-p join` \n";
@@ -82,8 +73,8 @@ class Poker extends Command {
           startMessage += "Good Luck!";
           message.channel.send(startMessage);
 
-          this.client.plug.chat("Discord Texas Hold'em Poker will start in 5 minute in channel #" + message.channel.name + "!");
-          this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+          this.client.chat("Discord Texas Hold'em Poker will start in 5 minute in channel #" + message.channel.name + "!");
+          this.client.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
           this.client.pokerUtil.running = true;
 
@@ -112,22 +103,22 @@ class Poker extends Command {
             return message.reply("The game is Full!");
           }
 
-          if (this.client.pokerUtil.startingPlayers.has(userID)) return true;
+          if (this.client.pokerUtil.startingPlayers.has(message.author.id)) return true;
 
-          const props = inst.get("props");
+          //const props = inst.get("props");
 
-          if (props < price) {
-            return message.reply("You don't have enough props.");
-          }
+          //if (props < price) {
+            //return message.reply("You don't have enough props.");
+          //}
 
-          await inst.decrement("props", { by: price });
-          await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
+          //await inst.decrement("props", { by: price });
+          //await this.client.db.models.users.increment("props", { by: price, where: { id: "40333310" } });
 
           if (!this.client.pokerUtil.started) {
-            this.client.pokerUtil.players.add(userID);
+            this.client.pokerUtil.players.add(message.author.id);
           }
 
-          this.client.pokerUtil.startingPlayers.add(userID);
+          this.client.pokerUtil.startingPlayers.add(message.author.id);
           await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.add("512635547320188928").catch(console.error);
 
           return message.reply("Joined Poker.");
@@ -143,7 +134,7 @@ class Poker extends Command {
             return false;
           }
 
-          if (this.client.pokerUtil.currentPlayer.id != userID) {
+          if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
@@ -166,7 +157,7 @@ class Poker extends Command {
             return false;
           }
 
-          if (this.client.pokerUtil.currentPlayer.id != userID) {
+          if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
@@ -183,7 +174,7 @@ class Poker extends Command {
             return message.reply("Poker is not running!");
           }
 
-          if (this.client.pokerUtil.currentPlayer.id != userID) {
+          if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
@@ -196,7 +187,7 @@ class Poker extends Command {
         case "fold": {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
-          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+          } else if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           }
 
@@ -205,7 +196,7 @@ class Poker extends Command {
         case "skip": {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
-          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+          } else if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           } else if (!this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You cannot skip unless you have gone all-in.");
@@ -216,18 +207,18 @@ class Poker extends Command {
         case "allin": {
           if (!this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
-          } else if (this.client.pokerUtil.currentPlayer.id != userID) {
+          } else if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           } else if (this.client.pokerUtil.allInPlayers.has(this.client.pokerUtil.currentPlayer.id)) {
             return message.reply("You gone all-in! You can only skip at this point!");
           }
 
-          const props = inst.get("props");
+          //const props = inst.get("props");
 
-          if (props == 0) {
-            message.reply("You have 0 props.");
-            return this.client.pokerUtil.exit();
-          }
+          //if (props == 0) {
+            //message.reply("You have 0 props.");
+            //return this.client.pokerUtil.exit();
+          //}
 
           return this.client.pokerUtil.allIn();
         }
@@ -235,23 +226,23 @@ class Poker extends Command {
           if (!this.client.pokerUtil.checkGame() && !this.client.pokerUtil.started) {
             return message.reply("Poker is not running!");
           } else if (!this.client.pokerUtil.started) {
-            this.client.pokerUtil.startingPlayers.delete(userID);
+            this.client.pokerUtil.startingPlayers.delete(message.author.id);
 
-            await this.client.guilds.cache.get("485173051432894489").members.cache.get(userID).roles.remove("512635547320188928").catch(console.warn);
+            await this.client.guilds.cache.get("485173051432894489").members.cache.get(message.author.id).roles.remove("512635547320188928").catch(console.warn);
 
             return message.reply("You left the table!");
           }
 
-          if (this.client.pokerUtil.currentPlayer.id != userID) {
+          if (this.client.pokerUtil.currentPlayer.id != message.author.id) {
             return message.reply("It's not your turn!");
           }
 
           return this.client.pokerUtil.exit();
         }
         case "reset": {
-          const user = this.client.plug.user(userDB.get("id"));
+          //const user = await this.client.getUser(userDB.get("id"));
 
-          if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
+          //if (!isObject(user) || await this.client.utils.getRole(user) <= ROLE.MANAGER) return false;
 
           await this.client.redis.removeCommandFromCoolDown("discord", "poker@play", "perUse");
 

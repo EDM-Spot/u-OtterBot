@@ -130,49 +130,33 @@ module.exports = (client) => {
     }
 
     async getUsername(discord) {
-      const userDB = await client.db.models.users.findOne({
-        where: {
-          discord: discord,
-        },
-      });
+      const user = await this.client.getUserbyDiscord(discord);
   
-      if (isNil(userDB)) {
+      if (!isObject(user)) {
         return null;
       }
   
-      const userID = userDB.get("id");
-  
-      const plugUser = client.plug.user(userID);
-  
-      if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
+      if (typeof user.username !== "string" || !user.username.length) {
         return null;
       }
   
-      return plugUser.username;
+      return user.username;
     }
 
     async moveWinner(discord) {
-      const userDB = await client.db.models.users.findOne({
-        where: {
-          discord: discord,
-        },
-      });
+      const user = await this.client.getUserbyDiscord(discord);
   
-      if (isNil(userDB)) {
+      if (isObject(user)) {
         return null;
       }
   
-      const userID = userDB.get("id");
-  
-      const plugUser = client.plug.user(userID);
-  
-      if (!plugUser || typeof plugUser.username !== "string" || !plugUser.username.length) {
+      if (typeof user.username !== "string" || !user.username.length) {
         return null;
       }
 
-      client.plug.chat("@" + plugUser.username + " Won the Discord Trivia! Moving to 1...");
+      client.chat("@" + user.username + " Won the Discord Trivia! Moving to 1...");
   
-      return client.queue.add(plugUser, 1);
+      return client.queue.add(user, 1);
     }
   }
 

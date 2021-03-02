@@ -1,11 +1,11 @@
 const { isNil, isNaN, isObject } = require("lodash");
-const { fn, col } = require("sequelize");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
   const util = {
     name: "updateRDJ",
     function: async (id) => {
+      return;
       if (isNil(id)) return false;
 
       const user = bot.plug.user(id);

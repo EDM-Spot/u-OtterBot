@@ -15,7 +15,6 @@ class Trivia extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
     if (await this.client.roulette.check() || await this.client.russianRoulette.check() || this.client.triviaUtil.check() || this.client.pokerUtil.checkGame() || this.client.unoUtil.checkGame()) {
       return true;
     }
@@ -24,27 +23,27 @@ class Trivia extends Command {
     const isWeekend = (day === 6) || (day === 7);
     const isDecember = (moment().month() === 11);
 
-    let price = "Costs 2 Props.";
+    let price = "Costs 0 Props.";
     
-    if (isWeekend) {
-      price = "FREE Weekends enabled!";
-    }
+    //if (isWeekend) {
+      //price = "FREE Weekends enabled!";
+    //}
 
-    if (isDecember) {
-      price = "FREE December!";
-    }
+    //if (isDecember) {
+      //price = "FREE December!";
+    //}
 
     let startMessage = "Trivia will start in 5 Minute! Use `-join` to play. " + price + " \n";
     startMessage += "You will be warned 30 seconds before it starts. \n";
     startMessage += "Press ✅ or ❌ to answer the question. The trivia will continue until only one stays. \n";
     startMessage += "You have 15 Seconds to answer when questions shows up. \n";
-    startMessage += "The Winner will be moved to position 3 so don't forget to stay on plug. \n";
+    startMessage += "The Winner will be moved to position 3 so don't forget to stay online. \n";
     startMessage += "Good Luck!";
     message.channel.send(startMessage);
 
-    this.client.plug.chat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "!");
-    this.client.plug.chat("The winner gets moved to position 3!");
-    this.client.plug.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
+    this.client.chat("@djs Discord Trivia is starting now in channel #" + message.channel.name + "!");
+    this.client.chat("The winner gets moved to position 3!");
+    this.client.chat("Join EDM Spot's Official Discord: https://discord.gg/QvvD8AC");
 
     await this.client.triviaUtil.start();
 

@@ -2,7 +2,7 @@ const { isNil } = require("lodash");
 const request = require("request-promise");
 
 module.exports = function Command(bot) {
-  bot.uCommands.register({
+  bot.botCommands.register({
     names: ["gif"],
     minimumPermission: 0,
     cooldownType: "perUser",

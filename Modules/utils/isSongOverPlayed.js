@@ -1,10 +1,11 @@
 const { isNil, isObject } = require("lodash");
-const { Op } = require("sequelize");
 
 module.exports = function Util(bot) {
   const util = {
     name: "isSongOverPlayed",
     function: async (songAuthor, songTitle, cid) => {
+      return;
+      
       if (isNil(cid)) return;
 
       let playedCount = 0;

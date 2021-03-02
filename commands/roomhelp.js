@@ -7,19 +7,19 @@ const Command = require("../base/Command.js");
   a command, it is not shown to them. If a command name is given with the
   help command, its extended help is shown.
 */
-class PlugHelp extends Command {
+class RoomHelp extends Command {
   constructor(client) {
     super(client, {
-      name: "uhelp",
-      description: "Displays all the available EDMSpot commands for you.",
+      name: "roommhelp",
+      description: "Displays all the available Room commands for you.",
       category: "System",
-      usage: "uhelp [command]",
-      aliases: ["uh", "uhalp"]
+      usage: "roomhelp [command]",
+      aliases: ["rh", "rhalp"]
     });
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    const cmds = this.client.uCommands.getLoaded();
+    const cmds = this.client.botCommands.getLoaded();
     const commands = [];
 
     const roles = {
@@ -74,7 +74,7 @@ class PlugHelp extends Command {
     //const commandNames = commands.command.keyArray();
     //const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
     let currentCategory = "";
-    let output = "= Plug Room Command List =\n";
+    let output = "= Room Command List =\n";
     commands.forEach(c => {
       const cat = c.roleName.toProperCase();
       if (currentCategory !== cat) {
@@ -97,4 +97,4 @@ class PlugHelp extends Command {
   }
 }
 
-module.exports = PlugHelp;
+module.exports = RoomHelp;

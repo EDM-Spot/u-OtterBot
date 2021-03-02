@@ -1,6 +1,6 @@
 const { get, assign, isNil } = require("lodash");
 
-const NO_DELETION = ["props"];
+//const NO_DELETION = ["props"];
 const IMMEDIATE_DELETION = ["d", "join", "enter", "shush", "rules", "cmds", "plays", "meh"];
 const CMD_BANNED = ["cookie", "myprops", "hello", "catfact", "catfacts", "urban", "eta", "sodas", "gif", "myrank"];
 
@@ -20,55 +20,57 @@ module.exports = class Command {
       message: this.utils.replace(string, variables),
     }));
 
-    if (ttl) {
-      return reply.delay(ttl).call("delete");
-    }
+    //if (ttl) {
+      //return reply.delay(ttl).call("delete");
+    //}
 
     return true;
   }
   async handleDeletion() {
     const { registeredCommand, name } = this.instance;
+    const { rawData } = this;
 
     //if (get(this.rawData, "user.gRole", 0) >= ROLE.SITEMOD) return;
-    if (NO_DELETION.includes(name)) return;
+    //if (NO_DELETION.includes(name)) return;
 
     //if (IMMEDIATE_DELETION.includes(name) || registeredCommand.minimumPermission >= ROLE.DJ) {
-    //await this.rawData.delete();
-    //}
+    if (IMMEDIATE_DELETION.includes(name)) {
+      await this.bot.delete(rawData.uid);
+    }
 
     this.deletionTimeout = setTimeout(async (rawData) => { // eslint-disable-line no-unused-vars
-      await rawData.delete();
+      await this.bot.delete(rawData.uid);
     }, 3e4, this.rawData);
   }
-  async isBanned() {
-    const { name } = this.instance;
-    const { bot, rawData } = this;
+  //async isBanned() {
+    //const { name } = this.instance;
+    //const { bot, rawData } = this;
 
-    if (!CMD_BANNED.includes(name)) {
-      return false;
-    }
+    //if (!CMD_BANNED.includes(name)) {
+      //return false;
+    //}
 
-    const userCmdBanned = await bot.db.models.cmdbans.findOne({
-      where: {
-        id: rawData.uid,
-      },
-    });
+    //const userCmdBanned = await bot.db.models.cmdbans.findOne({
+      //where: {
+        //id: rawData.uid,
+      //},
+    //});
 
-    if (isNil(userCmdBanned)) return false;
+    //if (isNil(userCmdBanned)) return false;
 
-    const timePassed = bot.moment().diff(bot.moment(userCmdBanned.time), "hours");
+    //const timePassed = bot.moment().diff(bot.moment(userCmdBanned.time), "hours");
 
-    switch (true) {
-      case (userCmdBanned.duration === "h" && timePassed >= 1):
-      case (userCmdBanned.duration === "d" && timePassed >= 24):
-        await bot.db.models.cmdbans.destroy({ where: { id: userCmdBanned.id } });
-        return false;
-      default:
-        break;
-    }
+    //switch (true) {
+      //case (userCmdBanned.duration === "h" && timePassed >= 1):
+      //case (userCmdBanned.duration === "d" && timePassed >= 24):
+        //await bot.db.models.cmdbans.destroy({ where: { id: userCmdBanned.id } });
+        //return false;
+      //default:
+        //break;
+    //}
 
-    return true;
-  }
+    //return true;
+  //}
   async isOnCooldown(registeredCommand) {
     const { id, cooldownType: cdType } = registeredCommand;
 
@@ -95,9 +97,9 @@ module.exports = class Command {
 
     if (!successBool) await rawData.delete();
 
-    if (await this.utils.getRole(rawData.user) === 5000) {
-      return;
-    }
+    //if (await this.utils.getRole(rawData.user) === 5000) {
+      //return;
+    //}
 
     return redis.placeCommandOnCooldown(command.platform, id, cdType, rawData.uid, duration);
   }
@@ -105,16 +107,21 @@ module.exports = class Command {
     const { rawData, instance: command } = this;
     const { registeredCommand } = command;
 
-    //await this.handleDeletion();
+    await this.handleDeletion();
 
+    //if (await this.utils.getRole(rawData.user) >= registeredCommand.minimumPermission) {
+      //const isBanned = await this.isBanned();
+      const isOnCooldown = await this.isOnCooldown(registeredCommand);
 
+      //if (!isBanned) {
+        if (!isOnCooldown) {
           const success = registeredCommand.execute.call(this, rawData, command, this.lang.commands);
 
           if (registeredCommand.cooldownType !== "none") {
             await this.placeOnCooldown(registeredCommand, success);
           }
-        
-      
-    }
-  
+        }
+      //}
+    //}
+  }
 };

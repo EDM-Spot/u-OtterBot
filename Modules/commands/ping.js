@@ -1,5 +1,5 @@
 module.exports = function Command(bot) {
-  bot.uCommands.register({
+  bot.botCommands.register({
     names: ["ping"],
     minimumPermission: 2000,
     cooldownType: "perUse",

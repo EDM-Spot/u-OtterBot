@@ -1,7 +1,7 @@
 const { isObject } = require("lodash");
 
 module.exports = function Command(bot) {
-  bot.uCommands.register({
+  bot.botCommands.register({
     names: ["cookie", "cookies"],
     minimumPermission: 0,
     cooldownType: "perUser",
@@ -13,7 +13,7 @@ module.exports = function Command(bot) {
         this.reply(bot.lang.commands.invalidUser, {});
         return false;
       }
-      
+
       const user = mentions[0];
 
       if (!isObject(user)) {
@@ -23,7 +23,7 @@ module.exports = function Command(bot) {
 
       const randomCookie = Math.floor(Math.random() * lang.cookie.length);
 
-      this.reply(lang.cookie[randomCookie], { receiver: user.username, sender: rawData.un });
+      this.reply(lang.cookie[randomCookie], { receiver: user, sender: rawData.un });
       return true;
     },
   });

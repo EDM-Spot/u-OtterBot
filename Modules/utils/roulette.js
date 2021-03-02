@@ -10,7 +10,7 @@ module.exports = function Util(bot) {
       this.players = [];
     }
     async autoStart() {
-      const waitlist = bot.plug.waitlist();
+      const waitlist = await bot.getWaitlist();
       const day = moment().isoWeekday();
       const isWeekend = (day === 6) || (day === 7);
       const isDecember = (moment().month() === 11);
@@ -19,7 +19,7 @@ module.exports = function Util(bot) {
         return;
       }
 
-      const cooldown = await bot.redis.getCommandOnCoolDown("plug", "roulette@start", "perUse");
+      const cooldown = await bot.redis.getCommandOnCoolDown("main", "roulette@start", "perUse");
 
       if (cooldown != -2) {
         return;
@@ -30,7 +30,7 @@ module.exports = function Util(bot) {
       }
 
       const duration = 60;
-      let price = 1;
+      let price = 0;
 
       if (isWeekend || isDecember) {
         price = 0;
@@ -39,26 +39,26 @@ module.exports = function Util(bot) {
       await this.start(duration, price);
 
       if (isWeekend  && !isDecember) {
-        bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})).delay(duration * 1e3).call("delete");
+        bot.chat(bot.utils.replace(bot.lang.commands.roulette.startingWeekend, {})); //.delay(duration * 1e3).call("delete");
       }
 
       if (isDecember) {
-        bot.plug.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})).delay(duration * 1e3).call("delete");
+        bot.chat(bot.utils.replace(":christmasballs1: Merry Christmas! :christmasballs1:", {})); //.delay(duration * 1e3).call("delete");
       }
 
-      bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})).delay(duration * 1e3).call("delete");
+      bot.chat(bot.utils.replace(bot.lang.commands.roulette.starting, {})); //.delay(duration * 1e3).call("delete");
 
-      bot.plug.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
+      bot.chat(bot.utils.replace(bot.lang.commands.roulette.info, {
         duration,
         price: price === 0 ? bot.lang.commands.roulette.free : `${price} prop${price > 1 ? "s" : ""}`,
-      })).delay(duration * 1e3).call("delete");
+      })); //.delay(duration * 1e3).call("delete");
     }
     async start(duration, price) {
       this.running = true;
       this.duration = duration;
       this.price = price;
 
-      await bot.redis.placeCommandOnCooldown("plug", "roulette@start", "perUse", 1, 3600);
+      await bot.redis.placeCommandOnCooldown("main", "roulette@start", "perUse", 1, 3600);
 
       this.timeout = setTimeout(async () => {
         await this.sort();
@@ -76,7 +76,7 @@ module.exports = function Util(bot) {
     }
     async check(cooldown) {
       if (cooldown) {
-        return bot.redis.getCommandOnCoolDown("plug", "roulette@start", "perUse");
+        return bot.redis.getCommandOnCoolDown("main", "roulette@start", "perUse");
       }
 
       return this.running;
@@ -114,15 +114,15 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       const winner = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.user(winner);
-      const waitlist = bot.plug.waitlist();
+      const user = await bot.getUser(winner);
+      const waitlist = await bot.getWaitlist();
 
       if (!players.length && this.end()) {
-        bot.plug.chat(bot.lang.roulette.somethingwrong);
+        bot.chat(bot.lang.roulette.somethingwrong);
         return;
       }
 
-      const position = this.constructor.position(waitlist.positionOf(winner), waitlist.length);
+      const position = this.constructor.position(await bot.getWaitlistPos(winner), waitlist.length);
 
       if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
@@ -144,7 +144,7 @@ module.exports = function Util(bot) {
       //   await bot.plug.sendChat(user.username + " won " + random + " :fplcandy:");
       // }
 
-      bot.plug.chat(bot.utils.replace(bot.lang.roulette.winner, {
+      bot.chat(bot.utils.replace(bot.lang.roulette.winner, {
         winner: user.username,
         position: position,
       }));
@@ -154,22 +154,21 @@ module.exports = function Util(bot) {
     async sort() {
       if (!this.players.length && this.end()) {
         this.end();
-        return bot.plug.chat(bot.lang.roulette.noplayers);
+        return bot.chat(bot.lang.roulette.noplayers);
       }
 
       if (this.players.length < 3) {
         this.end();
-        return bot.plug.chat(bot.lang.roulette.noplayers);
+        return bot.chat(bot.lang.roulette.noplayers);
       }
 
       this.running = false;
 
       const alteredOdds = [];
-      const waitlist = bot.plug.waitlist();
 
       each(this.players, async (player) => {
-        if (bot.plug.user(player)) {
-          if (waitlist.positionOf(player) === -1) {
+        if (await bot.getUser(player)) {
+          if (await bot.getWaitlistPos(player) === -1) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));

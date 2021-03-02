@@ -12,19 +12,10 @@ const config = {
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
   "token": "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0",
 
-  "dashboard" : {
-    "oauthSecret": "enter oauth secret here", // This is the `client` secret in your bot application page.
-    "callbackURL": "http://localhost:8080/callback",
-    "sessionSecret": "super-secret-session-thing",
-    "domain": "localhost",
-    "port": 8080
-  },
-
   // Plug data
-  "plug" : {
+  "edmspot" : {
     "email": "enter email here",
-    "password": "secret password",
-    "room": "myroom"
+    "password": "secret password"
   },
 
   "youtube": "Token",
@@ -32,14 +23,7 @@ const config = {
   "soundcloud": "Token",
 
   "db": {
-    "sequelize": {
-      "dialect": "postgres",
-      "username": "",
-      "password": "",
-      "host": "",
-      "port": "5432",
-      "database": ""
-    },
+    "mongo": "",
     "redis": {
       "host": null,
       "port": "6379",

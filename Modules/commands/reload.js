@@ -1,5 +1,5 @@
 module.exports = function Command(bot) {
-  bot.uCommands.register({
+  bot.botCommands.register({
     names: ["reload"],
     minimumPermission: 3000,
     cooldownType: "perUse",

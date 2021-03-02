@@ -26,17 +26,15 @@ module.exports = class {
       this.client.settings.set("default", this.client.config.defaultSettings);
     }
 
-    // Initializes the dashboard, which must be done on ready otherwise some data
-    // may be missing from the dashboard. 
-    //require("../util/trivia.js")(this.client);
+    require("../util/trivia.js")(this.client);
 
-    //require("../util/poker.js")(this.client);
+    require("../util/poker.js")(this.client);
 
-    //require("../util/uno.js")(this.client);
+    require("../util/uno.js")(this.client);
 
-    //require("../util/russianroulette.js")(this.client);
+    require("../util/russianroulette.js")(this.client);
 
-    //require("../util/voice.js")(this.client);
+    require("../util/voice.js")(this.client);
     
     // Set the game as the default help command + guild count.
     // NOTE: This is also set in the guildCreate and guildDelete events!

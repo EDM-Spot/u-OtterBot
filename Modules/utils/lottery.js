@@ -61,10 +61,10 @@ module.exports = function Util(bot) {
     }
     async winner(players) {
       if (this.acceptedBool) return;
-      if (bot.plug.waitlist().length <= 10) return;
+      if (await bot.getWaitlist().length <= 10) return;
 
       const winner = players[Math.floor(Math.random() * players.length)];
-      const user = bot.plug.user(winner);
+      const user = await bot.getUser(winner);
 
       if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
@@ -81,26 +81,26 @@ module.exports = function Util(bot) {
 
       const position = 5;
 
-      const userPos = bot.plug.waitlist().positionOf(user.id) + 1;
+      const userPos = bot.getWaitlistPos(user._id);
 
       if (userPos >= 0 && userPos <= 5) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
 
-      await bot.redis.removeGivePosition(bot.plug.me().id, user.id);
+      await bot.redis.removeGivePosition(await bot.getSelf()._id, user._id);
 
-      bot.plug.chat(bot.utils.replace(bot.lang.lotteryWinner, {
+      bot.chat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
         position: position,
       }));
 
       //bot.queue.add(user, position);
-      await bot.redis.registerGivePosition(bot.plug.me().id, user.id, position);
+      await bot.redis.registerGivePosition(await bot.getSelf()._id, user._id, position);
 
       this.giveTimer = moment.duration(3, "minutes").timer({loop: false, start: true}, async () => {
-        bot.plug.chat(bot.lang.notAccepted);
-        bot.redis.removeGivePosition(bot.plug.me().id, user.id);
+        bot.chat(bot.lang.notAccepted);
+        bot.redis.removeGivePosition(await bot.getSelf()._id, user._id);
         this.winner(players.filter(player => player !== winner));
       }, (120000));
     
@@ -122,11 +122,11 @@ module.exports = function Util(bot) {
       const alteredOdds = [];
 
       each(this.players, async (player) => {
-        if (bot.plug.user(player)) {
-          if (bot.plug.waitlist().positionOf(player) === -1 || bot.plug.user(player).role >= ROLE.BOUNCER) {
+        if (await bot.getUser(player)) {
+          if (await bot.getWaitlistPos(player) === -1) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            if (bot.plug.waitlist().positionOf(player) > 6) {
+            if (await bot.getWaitlistPos(player) > 6) {
               alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
             }
           }

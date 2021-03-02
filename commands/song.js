@@ -11,10 +11,10 @@ class Song extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
     try {
-      const currentMedia = this.client.plug.historyEntry();
-      await message.reply("**Current Song Playing:** https://youtu.be/" + currentMedia.media.cid);
+      const currentDJ = await this.client.getDj();
+      
+      await message.reply("**Current Song Playing:** https://youtu.be/" + currentDJ.media.sourceID);
     } catch (e) {
       console.log(e);
     }

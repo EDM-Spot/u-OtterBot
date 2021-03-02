@@ -1,2 +1,1 @@
-# u-OtterBot
-A bot for u-EDMSpot
+# OtterBot

@@ -13,7 +13,7 @@ class UpdateRoles extends Command {
   }
 
   async run(message, args, level) { // eslint-disable-line no-unused-vars
-    return message.reply("Not Implemented");
+    return;
     message.guild.members.fetch().then(async members => {
       members.forEach(async member => {
         try {

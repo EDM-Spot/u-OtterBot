@@ -1,5 +1,5 @@
 module.exports = function Command(bot) {
-  bot.uCommands.register({
+  bot.botCommands.register({
     names: ["discord"],
     minimumPermission: 0,
     cooldownType: "perUse",

@@ -9,7 +9,7 @@ config.js
 data/*
 .vscode/
 
-!Modules/data/lang.json
+!plugModules/data/lang.json
 
 # Runtime data
 pids
