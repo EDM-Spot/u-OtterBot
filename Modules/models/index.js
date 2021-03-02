@@ -2,7 +2,7 @@ const { each } = require("lodash");
 const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs-extra"));
 
-module.exports = function ModelsManager(bot, Sequelize) {
+module.exports = function ModelsManager(bot, Mongoose) {
   this.loadModels = function LoadModels() {
     return new Promise(async (resolve, reject) => {
       try {
@@ -14,7 +14,7 @@ module.exports = function ModelsManager(bot, Sequelize) {
         each(fileNames, (name) => {
           /* eslint-disable global-require */
           /* eslint-disable import/no-dynamic-require */
-          const Module = require(`${__dirname}/${name}`)(bot, Sequelize);
+          const Module = require(`${__dirname}/${name}`)(bot, Mongoose);
 
           modules.push(Module);
         });
