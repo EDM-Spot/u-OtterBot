@@ -9,15 +9,14 @@ module.exports = (client) => {
     }
 
     async play() {
-      const currentDJ = client.getDj();
+      const currentDJ = await client.getDj();
       const voiceChannel = client.channels.cache.get(this.channel);
 
       if (voiceChannel.members.size < 1) { return; }
 
       const connection = await voiceChannel.join();
-
-      console.log(currentDJ);
-      if (currentDJ.media.media.sourceType === "youtube") {
+      
+      if (currentDJ.media.sourceType === "youtube") {
         const url = `https://www.youtube.com/watch?v=${currentDJ.media.sourceID}`;
 
         const startDate = new Date(currentDJ.playedAt);
@@ -36,7 +35,7 @@ module.exports = (client) => {
           type: "opus"
         });
       } else {
-        await fetch(`https://api.soundcloud.com/tracks/${currentDJ.media.media.sourceID}/stream?client_id=${this.key}`)
+        await fetch(`https://api.soundcloud.com/tracks/${currentDJ.media.sourceID}/stream?client_id=${this.key}`)
           .then(res => {
             connection.play(res.url, {
               volume: false
