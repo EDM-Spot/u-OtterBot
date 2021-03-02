@@ -63,12 +63,12 @@ module.exports = function Event(bot, filename, platform) {
           }
         }
       } catch (err) {
-        songAuthor = currentPlay.author;
+        songAuthor = currentPlay.artist;
         songTitle = currentPlay.title;
       }
 
       if (isNil(songAuthor) || isNil(songTitle)) {
-        songAuthor = currentPlay.author;
+        songAuthor = currentPlay.artist;
         songTitle = currentPlay.title;
       }
 
@@ -114,7 +114,7 @@ module.exports = function Event(bot, filename, platform) {
 
             const embed = new Discord.MessageEmbed()
               //.setTitle("Title")
-              .setAuthor(currentPlay.author + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
+              .setAuthor(currentPlay.artist + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
               .setColor(0xFF00FF)
               //.setDescription("This is the main body of text, it can hold 2048 characters.")
               .setFooter("By " + await bot.getSelf().username)
