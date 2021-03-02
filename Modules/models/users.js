@@ -10,7 +10,7 @@ module.exports = async function Model(bot, mongoose) {
     reason: { type: String, default: "" },
   });
 
-  const Users = bot.db.define("users", {
+  const Users = bot.db.model("users", {
     username: {
       type: String,
       minlength: [3, "Usernames have to be at least 3 characters long."],
@@ -63,8 +63,6 @@ module.exports = async function Model(bot, mongoose) {
     banned: bannedSchema,
     pendingActivation: { type: String, required: false },
   });
-
-  await Users.sync();
 
   bot.db.models.users = Users;
 
