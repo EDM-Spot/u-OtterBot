@@ -188,6 +188,10 @@ class Bot extends Discord.Client {
     const user = await this.getUser(body.data.data.userID);
 
     body.data.data.media.user = user;
+    body.data.data.media.stats = body.data.data.stats;
+
+    body.data.data.media.historyID = body.data.data.historyID;
+    body.data.data.media.playedAt = body.data.data.playedAt;
 
     return body.data.data.media;
   }
@@ -226,12 +230,6 @@ class Bot extends Discord.Client {
     const body = await axios.get(`${API_URL}/booth/history`);
 
     return body.data.data;
-  }
-
-  async getVotes() {
-    const body = await axios.get(`${API_URL}/now`);
-
-    return body.data.booth.stats;
   }
 
   async isLocked() {

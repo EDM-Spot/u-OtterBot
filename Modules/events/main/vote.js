@@ -7,7 +7,7 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async () => {
       const dj = await bot.getDj();
-      const votes = await bot.getVotes();
+      const votes = dj.stats;
 
       if (isNil(votes)) return;
 
