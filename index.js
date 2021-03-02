@@ -83,18 +83,13 @@ class Bot extends Discord.Client {
 
     await axios.get(`${API_URL}/${AUTH_SOCKET}`)
       .then(async response => {
-        console.log(response.data.data.socketToken);
-
         await new Promise((resolve, reject) => {
           let sent = false;
-
-          console.log("connecting socket", response.data.data.socketToken);
 
           this.socket = new WebSocket(SOCKET_URL);
 
           this.socket.on("open", () => {
             sent = true;
-            console.log("send", response.data.data.socketToken);
             this.socket.send(response.data.data.socketToken);
             resolve();
           });
@@ -212,10 +207,11 @@ class Bot extends Discord.Client {
     return await axios.delete(`${API_URL}/chat/${id}`);
   }
 
-  async skip() {
+  async skip(id, reason) {
     return await axios.post(`${API_URL}/booth/skip`, {
-      reason: "Skipped by OtterBot",
-      userID: "60247370d5cc5241eabcb1e7"
+      userID: id,
+      reason: reason,
+      remove: false
     });
   }
 

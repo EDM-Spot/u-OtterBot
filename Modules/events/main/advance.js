@@ -133,7 +133,7 @@ module.exports = function Event(bot, filename, platform) {
 
             //bot.channels.cache.get("695987344280649839").send(bot.lang.commands.blacklist.currentAdded);
 
-            await bot.skip();
+            await bot.skip(next.userID, "Blackwords");
 
             if (blackword[i] == "gemido" || blackword[i] == "gemidão" || blackword[i] == "rape") {
               //await currentDJ.ban(BAN_DURATION.PERMA, BAN_REASON.SPAMMING);
@@ -189,7 +189,7 @@ module.exports = function Event(bot, filename, platform) {
             bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
 
             //await bot.utils.lockskip(currentDJ);
-            await bot.skip();
+            await bot.skip(next.userID, "Exceeds time length");
             skipped = true;
           }
         //}

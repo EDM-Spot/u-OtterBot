@@ -13,8 +13,8 @@ module.exports = function Command(bot) {
       const currentMedia = bot.getDj();
 
       if (isObject(currentMedia)) {
-        await bot.skip();
-        
+        await bot.skip(rawData.uid, "Skipped using !skip");
+
         this.reply(lang.moderation.effective, {
           mod: rawData.un,
           command: `!${name}`,
