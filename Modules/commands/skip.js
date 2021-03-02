@@ -14,6 +14,7 @@ module.exports = function Command(bot) {
 
       if (isObject(currentMedia)) {
         await bot.skip();
+        
         this.reply(lang.moderation.effective, {
           mod: rawData.un,
           command: `!${name}`,

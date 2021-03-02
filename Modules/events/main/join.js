@@ -7,7 +7,7 @@ module.exports = function Event(bot, platform) {
     platform,
     run: async (data) => {
       console.log(data);
-      if (isNil(data.username) || data.id === await bot.getSelf().id) return;
+      if (isNil(data.username) || data.id === await bot.getSelf()._id) return;
       
       const position = parseInt(await bot.redis.findDisconnection(data.id), 10);
 

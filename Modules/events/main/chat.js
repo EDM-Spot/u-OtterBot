@@ -130,7 +130,7 @@ module.exports = function Event(bot, platform) {
       }
 
       if (!commandHandleRegex.test(rawData.message)) {
-        if (rawData.uid !== await bot.getSelf().id) {
+        if (rawData.uid !== await bot.getSelf()._id) {
           bot.channels.cache.get("695987344280649839").send(rawData.un + ": " + rawData.message.replace("@", ""));
         }
       }
@@ -138,7 +138,7 @@ module.exports = function Event(bot, platform) {
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;
         if (bot.lottery.timer.isStarted) {
-          if (rawData.uid !== await bot.getSelf().id) {
+          if (rawData.uid !== await bot.getSelf()._id) {
             if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
               bot.lottery.add(rawData.uid);
             }
