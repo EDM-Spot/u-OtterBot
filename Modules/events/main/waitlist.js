@@ -27,9 +27,6 @@ module.exports = function Event(bot, platform) {
         each(previousWaitList, (userID, position) => {
           position++;
 
-          console.log("newWaitList/////////////////////////////////////////////");
-          console.log(newWaitList);
-
           if (position !== newWaitList.length && !newWaitList.includes(userID)) {
             event.checkForLeave(userID).then(async () => {
               const latestDisconnection = await bot.redis.findDisconnection(userID);

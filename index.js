@@ -207,11 +207,17 @@ class Bot extends Discord.Client {
     return await axios.delete(`${API_URL}/chat/${id}`);
   }
 
-  async skip(id, reason) {
+  async skip(userID, reason) {
     return await axios.post(`${API_URL}/booth/skip`, {
-      userID: id,
-      reason: reason,
+      userID,
+      reason,
       remove: false
+    });
+  }
+
+  async joinWaitlist(id) {
+    return await axios.post(`${API_URL}/waitlist`, {
+      userID: id
     });
   }
 
@@ -219,10 +225,27 @@ class Bot extends Discord.Client {
     return await axios.delete(`${API_URL}/waitlist/60247370d5cc5241eabcb1e7`);
   }
 
-  async getPlaylists() {
-    const body = await axios.get(`${API_URL}/playlists`);
+  async getPlaylistItems() {
+    const body = await axios.get(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media?page[offset]=0&page[limit]=500`);
 
-    return body.data.data;
+    return body.data;
+  }
+
+  async deletePlaylistItems(currentList) {
+    return await axios.delete(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media`, {
+      items: currentList
+    });
+  }
+
+  async insertMedia(item) {
+    return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media`, {
+      items: item,
+      at: "end"
+    });
+  }
+
+  async shufflePlaylist() {
+    return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/shuffle`);
   }
 
   async getRoomHistory() {

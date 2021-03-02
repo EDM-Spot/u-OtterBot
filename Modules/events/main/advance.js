@@ -22,7 +22,7 @@ module.exports = function Event(bot, filename, platform) {
         return;
       }
 
-      //await bot.plug.joinWaitlist();
+      await bot.joinWaitlist(await bot.getSelf()._id);
 
       let songAuthor = null;
       let songTitle = null;

@@ -3,10 +3,12 @@ require("moment-timer");
 
 module.exports = function Event(bot, filename, platform) {
   const event = {
-    name: "connected",
+    name: "join",
     platform,
     _filename: filename,
-    run: async () => {
+    run: async (data) => {
+      if (data._id !== await bot.getSelf()._id) return;
+
       // Following the same reason to wait here as discord ready 
       await bot.wait(2000);
 
