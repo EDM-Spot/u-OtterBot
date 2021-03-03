@@ -13,13 +13,12 @@ module.exports = function Util(bot) {
       waitsDone = 0;
       countWaits = 0;
 
-      //await bot.leaveWaitlist();
+      await bot.leaveWaitlist();
 
       const currentList = await bot.getPlaylistItems();
       const itemIDs = currentList.map((media) => media._id);
 
       await bot.deletePlaylistItems(itemIDs);
-      return;
 
       /////////////////////////////////////////////////Channels
       //UCe55Gy-hFDvLZp8C8BZhBnw - NightBlue
@@ -82,15 +81,15 @@ module.exports = function Util(bot) {
 
                       if (duration > 0 && duration < 600) {
                         const Item = [{
-                          format: 1,
-                          cid: video.id.videoId,
-                          author: fulltitle.split(" - ")[0].trim(),
+                          sourceType: "youtube",
+                          sourceID: video.id.videoId,
+                          artist: fulltitle.split(" - ")[0].trim(),
                           title: fulltitle.split(" - ")[1].trim(),
                           duration: duration,
-                          image: video.snippet.thumbnails.default.url
+                          thumbnail: video.snippet.thumbnails.default.url
                         }];
 
-                        await this.addItem(Item, countWaits * 3500);
+                        await this.addItem(Item, countWaits * 500);
 
                         countWaits++;
                       }

@@ -155,7 +155,7 @@ class Bot extends Discord.Client {
   }
 
   async getSelf() {
-    const body = await axios.get(`${API_URL}/users/60247370d5cc5241eabcb1e7`);
+    const body = await axios.get(`${API_URL}/now`);
 
     return body.data.user;
   }
@@ -232,16 +232,14 @@ class Bot extends Discord.Client {
   }
 
   async deletePlaylistItems(currentList) {
-    console.log("deletePlaylistItems");
-    console.log(currentList);
-    
     return await axios.delete(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media`, {
-      items: currentList
+      data: {
+        items: currentList
+      }
     });
   }
 
   async insertMedia(item) {
-    console.log("insertMedia");
     return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media`, {
       items: item,
       at: "end"
@@ -249,7 +247,6 @@ class Bot extends Discord.Client {
   }
 
   async shufflePlaylist() {
-    console.log("shufflePlaylist");
     return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/shuffle`);
   }
 
