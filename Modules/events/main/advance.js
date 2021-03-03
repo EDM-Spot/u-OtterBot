@@ -190,7 +190,7 @@ module.exports = function Event(bot, filename, platform) {
             bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
 
             //await bot.utils.lockskip(currentDJ);
-            await bot.skip(next.userID, "Exceeds time length");
+            await bot.skip(next.userID, "duration");
             skipped = true;
           }
         //}
