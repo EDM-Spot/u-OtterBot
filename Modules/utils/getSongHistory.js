@@ -6,7 +6,8 @@ module.exports = function Util(bot) {
     function: async (songAuthor, songTitle, sourceID) => {
       if (isNil(sourceID)) return;
 
-      const songHistory = await bot.getRoomHistory();
+      const roomHistory = await bot.getRoomHistory();
+      const songHistory = roomHistory.shift();
 
       if (isNil(songAuthor) || isNil(songTitle)) {
         songAuthor = "undefined";

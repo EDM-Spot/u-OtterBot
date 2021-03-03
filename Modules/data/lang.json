@@ -1,5 +1,5 @@
 {
-  "startup": "/em is now running!",
+  "startup": "is now running!",
   "discordStartup": "`Bot is now running!`",
   "exceedstimeguard": "your media exceeds the defined maximum length (6m30s)!",
   "blacklisted": "your media is Blacklisted!",

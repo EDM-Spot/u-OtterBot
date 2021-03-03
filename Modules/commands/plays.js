@@ -10,7 +10,7 @@ module.exports = function Command(bot) {
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
     async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars    
       if (!args.length) {
-        const dj = await bot.dj();
+        const dj = await bot.getDj();
 
         if (isNil(dj)) {
           this.reply(lang.plays.nothingPlaying, {});
@@ -59,8 +59,15 @@ module.exports = function Command(bot) {
         } else {
           if (!songHistory.maybe) {
             //Todo: Use DB historyentry
-            const notSongHistory = await bot.getRoomHistory();
-            const playsCount = notSongHistory.length;
+            let playsCount = 0;
+            const roomHistory = await bot.getRoomHistory();
+            const notSongHistory = roomHistory.shift();
+
+            for (var i = 0; i < notSongHistory.length; i++) {
+              if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
+                playsCount++;
+              }
+            }
 
             if (playsCount < 1) {
               this.reply(lang.plays.lastPlaySkippedWas, {
@@ -120,10 +127,11 @@ module.exports = function Command(bot) {
         } else {
           if (!songHistory.maybe) {
             let playsCount = 0;
-            const notSongHistory = await bot.getRoomHistory();
+            const roomHistory = await bot.getRoomHistory();
+            const notSongHistory = roomHistory.shift();
 
-            for (var i = 0; i < notSongHistory.length; i++) {
-              if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
+            for (var e = 0; e < notSongHistory.length; e++) {
+              if (notSongHistory[e].media.sourceID == map(songHistory, "media.sourceID")[0]) {
                 playsCount++;
               }
             }
@@ -177,7 +185,9 @@ module.exports = function Command(bot) {
               songAuthor = fullTitle.split(" - ")[0].trim();
               songTitle = fullTitle.split(" - ")[1].trim();
             }
-            catch (err) { }
+            catch (err) {
+              //err
+            }
 
             const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
             //const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
@@ -188,10 +198,11 @@ module.exports = function Command(bot) {
             } else {
               if (!songHistory.maybe) {
                 let playsCount = 0;
-                const notSongHistory = await bot.getRoomHistory();
+                const roomHistory = await bot.getRoomHistory();
+                const notSongHistory = roomHistory.shift();
 
-                for (var i = 0; i < notSongHistory.length; i++) {
-                  if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
+                for (var o = 0; o < notSongHistory.length; o++) {
+                  if (notSongHistory[o].media.sourceID == map(songHistory, "media.sourceID")[0]) {
                     playsCount++;
                   }
                 }
