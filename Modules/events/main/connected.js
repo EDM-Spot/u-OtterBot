@@ -8,8 +8,6 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async (data) => {
       const botID = await bot.getSelf();
-      console.log(data._id);
-      console.log(botID._id);
       if (data._id !== botID._id) return;
 
       bot.chat(bot.lang.startup);
@@ -22,6 +20,8 @@ module.exports = function Event(bot, filename, platform) {
       //}
       
       console.info("[!] Connected!");
+
+      await bot.joinWaitlist(botID._id);
 
       var randomTimedText = [
         "Join our Discord https://discord.gg/QvvD8AC",

@@ -22,13 +22,6 @@ module.exports = function Event(bot, filename, platform) {
         return;
       }
 
-      const botID = await bot.getSelf();
-      try {
-        await bot.joinWaitlist(botID._id);
-      } catch (err) {
-        //err
-      }
-
       let songAuthor = null;
       let songTitle = null;
 
