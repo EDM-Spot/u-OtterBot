@@ -60,8 +60,8 @@ module.exports = function Command(bot) {
           if (!songHistory.maybe) {
             //Todo: Use DB historyentry
             let playsCount = 0;
-            const roomHistory = await bot.getRoomHistory();
-            const notSongHistory = roomHistory.shift();
+            const notSongHistory = await bot.getRoomHistory();
+            notSongHistory.shift();
 
             for (var i = 0; i < notSongHistory.length; i++) {
               if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
@@ -127,8 +127,8 @@ module.exports = function Command(bot) {
         } else {
           if (!songHistory.maybe) {
             let playsCount = 0;
-            const roomHistory = await bot.getRoomHistory();
-            const notSongHistory = roomHistory.shift();
+            const notSongHistory = await bot.getRoomHistory();
+            notSongHistory.shift();
 
             for (var e = 0; e < notSongHistory.length; e++) {
               if (notSongHistory[e].media.sourceID == map(songHistory, "media.sourceID")[0]) {
@@ -198,8 +198,8 @@ module.exports = function Command(bot) {
             } else {
               if (!songHistory.maybe) {
                 let playsCount = 0;
-                const roomHistory = await bot.getRoomHistory();
-                const notSongHistory = roomHistory.shift();
+                const notSongHistory = await bot.getRoomHistory();
+                notSongHistory.shift();
 
                 for (var o = 0; o < notSongHistory.length; o++) {
                   if (notSongHistory[o].media.sourceID == map(songHistory, "media.sourceID")[0]) {
