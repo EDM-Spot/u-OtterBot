@@ -19,7 +19,7 @@ module.exports = function Event(bot, filename, platform) {
         bot.global.isSkippedByMehGuard = true;
         
         bot.chat(`@${dj.user.username} ` + bot.lang.mehSkip);
-        await bot.skip(dj.user._id, "Too many mehs");
+        await bot.skip(dj.user._id, "downvotes");
       }
     },
     init() {

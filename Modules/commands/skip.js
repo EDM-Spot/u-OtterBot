@@ -14,7 +14,7 @@ module.exports = function Command(bot) {
 
       if (isObject(currentMedia)) {
         const botID = await bot.getSelf();
-        await bot.skip(botID._id, "Skipped using !skip");
+        await bot.skip(botID._id, "bot");
 
         this.reply(lang.moderation.effective, {
           mod: rawData.un,
