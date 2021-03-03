@@ -255,7 +255,7 @@ class Bot extends Discord.Client {
   }
 
   async getRoomHistory() {
-    const body = await axios.get(`${API_URL}/booth/history`).catch(function(error) { console.log(error); });
+    const body = await axios.get(`${API_URL}/booth/history?page[offset]=0&page[limit]=100`).catch(function(error) { console.log(error); });
 
     return body.data.data;
   }

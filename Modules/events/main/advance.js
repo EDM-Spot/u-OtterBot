@@ -196,38 +196,38 @@ module.exports = function Event(bot, filename, platform) {
         //}
       }
 
-      //const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentPlay.cid);
+      const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentPlay.sourceID);
 
-      //if (!bot.global.ignoreHistoryNext) {
-        //if (!isNil(songHistory)) {
-          //if (songHistory.skip) {
-            //if (!songHistory.maybe) {
-              //if (!skipped) {
-                //bot.plug.chat(bot.utils.replace(bot.lang.historySkip, {
-                  //time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-                //}));
+      if (!bot.global.ignoreHistoryNext) {
+        if (!isNil(songHistory)) {
+          if (songHistory.skip) {
+            if (!songHistory.maybe) {
+              if (!skipped) {
+                bot.chat(bot.utils.replace(bot.lang.historySkip, {
+                  time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
+                }));
 
-                //bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.historySkip, {
-                  //time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-                //}));
+                bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.historySkip, {
+                  time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
+                }));
 
-                //await next.skip();
-                //skipped = true;
-              //}
-            //} else {
-              //bot.plug.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
-                //cid: map(songHistory, "cid")[0],
-                //time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              //}));
+                await bot.skip(next.userID, "history");
+                skipped = true;
+              }
+            } else {
+              bot.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {
+                cid: map(songHistory, "media.sourceID")[0],
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
+              }));
 
-              //bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.maybeHistorySkip, {
-                //cid: map(songHistory, "cid")[0],
-                //time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
-              //}));
-            //}
-          //}
-        //}
-      //}
+              bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.maybeHistorySkip, {
+                cid: map(songHistory, "media.sourceID")[0],
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
+              }));
+            }
+          }
+        }
+      }
 
       //const savedID = currentPlay._id;
 

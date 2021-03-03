@@ -8,14 +8,11 @@ module.exports = function Command(bot) {
     cooldownDuration: 60,
     parameters: "[YouTube Link|SoundCloud Link]",
     description: "Checks the specified link, or the current media, for the last time it was played in the community.",
-    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars
-      return bot.chat("Not Implemented");
-      
+    async execute(rawData, { args }, lang) { // eslint-disable-line no-unused-vars    
       if (!args.length) {
-        const currentMedia = bot.plug.historyEntry();
-        const dj = bot.plug.dj();
+        const dj = await bot.dj();
 
-        if (!isObject(currentMedia)) {
+        if (isNil(dj)) {
           this.reply(lang.plays.nothingPlaying, {});
           return false;
         }
@@ -26,15 +23,15 @@ module.exports = function Command(bot) {
         let songTitle = null;
 
         try {
-          if (get(currentMedia.media, "format", 2) === 1) {
-            const YouTubeMediaData = await bot.youtube.getMedia(currentMedia.media.cid);
+          if (dj.media.sourceType === "youtube") {
+            const YouTubeMediaData = await bot.youtube.getMedia(dj.media.sourceID);
 
             const fullTitle = get(YouTubeMediaData, "snippet.title");
 
             songAuthor = fullTitle.split(" - ")[0].trim();
             songTitle = fullTitle.split(" - ")[1].trim();
           } else {
-            const SoundCloudMediaData = await bot.soundcloud.getTrack(currentMedia.media.cid);
+            const SoundCloudMediaData = await bot.soundcloud.getTrack(dj.media.sourceID);
 
             if (!isNil(SoundCloudMediaData)) {
               const fullTitle = SoundCloudMediaData.title;
@@ -45,46 +42,46 @@ module.exports = function Command(bot) {
           }
         }
         catch (err) {
-          songAuthor = currentMedia.media.author;
-          songTitle = currentMedia.media.title;
+          songAuthor = dj.media.artist;
+          songTitle = dj.media.title;
         }
 
         if (isNil(songAuthor) || isNil(songTitle)) {
-          songAuthor = currentMedia.media.author;
-          songTitle = currentMedia.media.title;
+          songAuthor = dj.media.artist;
+          songTitle = dj.media.title;
         }
 
-        const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, currentMedia.media.cid);
+        const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, dj.media.sourceID);
 
         if (isNil(songHistory)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.current });
           return true;
         } else {
           if (!songHistory.maybe) {
-            const playsCount = await bot.db.models.plays.count({
-              where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
-            });
+            //Todo: Use DB historyentry
+            const notSongHistory = await bot.getRoomHistory();
+            const playsCount = notSongHistory.length;
 
             if (playsCount < 1) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.current,
-                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               });
               return true;
             }
 
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.current,
-              time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+              time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               count: playsCount,
             });
             return true;
           } else {
-            if (map(songHistory, "format")[0] === 1) {
+            if (songHistory.media.sourceType === "youtube") {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.current,
-                cid: map(songHistory, "cid")[0],
-                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                cid: map(songHistory, "media.sourceID")[0],
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               });
               return true;
             }
@@ -115,43 +112,48 @@ module.exports = function Command(bot) {
         }
 
         const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
-        const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
+        //const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
 
         if (isNil(songHistory)) {
           this.reply(lang.plays.neverPlayed, { which: lang.plays.specified });
           return true;
         } else {
           if (!songHistory.maybe) {
-            const playsCount = await bot.db.models.plays.count({
-              where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
-            });
+            let playsCount = 0;
+            const notSongHistory = await bot.getRoomHistory();
+
+            for (var i = 0; i < notSongHistory.length; i++) {
+              if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
+                playsCount++;
+              }
+            }
 
             if (playsCount < 1) {
               this.reply(lang.plays.lastPlaySkippedWas, {
                 which: lang.plays.specified,
-                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               });
-              if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+              //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
               return true;
             }
 
             this.reply(lang.plays.lastPlayWas, {
               which: lang.plays.specified,
-              time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+              time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               count: playsCount,
             });
-            if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+            //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
             return true;
           } else {
-            if (map(songHistory, "format")[0] === 1) {
+            if (songHistory.media.sourceType === "youtube") {
               this.reply(lang.plays.maybeLastPlayWas, {
                 which: lang.plays.specified,
-                cid: map(songHistory, "cid")[0],
-                time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                cid: map(songHistory, "media.sourceID")[0],
+                time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
               });
-              if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+              //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
               return true;
             }
@@ -178,43 +180,48 @@ module.exports = function Command(bot) {
             catch (err) { }
 
             const songHistory = await bot.utils.getSongHistory(songAuthor, songTitle, cid);
-            const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
+            //const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, cid);
 
             if (isNil(songHistory)) {
               this.reply(lang.plays.neverPlayed, { which: lang.plays.specified });
               return true;
             } else {
               if (!songHistory.maybe) {
-                const playsCount = await bot.db.models.plays.count({
-                  where: { cid: `${map(songHistory, "cid")[0]}`, skipped: false },
-                });
+                let playsCount = 0;
+                const notSongHistory = await bot.getRoomHistory();
+
+                for (var i = 0; i < notSongHistory.length; i++) {
+                  if (notSongHistory[i].media.sourceID == map(songHistory, "media.sourceID")[0]) {
+                    playsCount++;
+                  }
+                }
 
                 if (playsCount < 1) {
                   this.reply(lang.plays.lastPlaySkippedWas, {
                     which: lang.plays.specified,
-                    time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                    time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
                   });
-                  if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+                  //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
                   return true;
                 }
 
                 this.reply(lang.plays.lastPlayWas, {
                   which: lang.plays.specified,
-                  time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                  time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
                   count: playsCount,
                 });
-                if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+                //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
                 return true;
               } else {
-                if (map(songHistory, "format")[0] === 1) {
+                if (songHistory.media.sourceType === "youtube") {
                   this.reply(lang.plays.maybeLastPlayWas, {
                     which: lang.plays.specified,
-                    cid: map(songHistory, "cid")[0],
-                    time: bot.moment(map(songHistory, "createdAt")[0]).fromNow(),
+                    cid: map(songHistory, "media.sourceID")[0],
+                    time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
                   });
-                  if (isOverplayed) { bot.plug.chat("Song Is Overplayed!"); }
+                  //if (isOverplayed) { bot.chat("Song Is Overplayed!"); }
 
                   return true;
                 }

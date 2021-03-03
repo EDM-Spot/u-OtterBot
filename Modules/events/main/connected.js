@@ -8,6 +8,8 @@ module.exports = function Event(bot, filename, platform) {
     _filename: filename,
     run: async (data) => {
       const botID = await bot.getSelf();
+      console.log(data._id);
+      console.log(botID._id);
       if (data._id !== botID._id) return;
 
       bot.chat(bot.lang.startup);
@@ -36,9 +38,9 @@ module.exports = function Event(bot, filename, platform) {
         bot.chat(randomTimedText[randomNumber]);
       });
 
-      let timeCover = new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
-        await bot.utils.timeCover();
-      });
+      //let timeCover = new moment.duration(60, "minutes").timer({loop: true, start: true, executeAfterWait: true}, async () => {
+        //await bot.utils.timeCover();
+      //});
 
       let randomRoulette = new moment.duration(120, "minutes").timer({loop: true, start: true}, async () => {
         await bot.roulette.autoStart();
