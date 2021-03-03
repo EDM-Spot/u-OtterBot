@@ -17,28 +17,28 @@ module.exports = function Event(bot, platform) {
       rawData.uid = rawData.userID;
 
       //const message = await bot.db.models.messages.create({
-        //id: rawData.uid,
-        //cid: rawData.id,
-        //username: rawData.un,
-        //message: rawData.message,
+      //id: rawData.uid,
+      //cid: rawData.id,
+      //username: rawData.un,
+      //message: rawData.message,
       //});
 
       //try {
-        //await bot.db.models.users.update(
-          //{ username: rawData.un, last_seen: moment() },
-          //{ where: { id: rawData.uid }, defaults: { id: rawData.uid } }
-        //);
+      //await bot.db.models.users.update(
+      //{ username: rawData.un, last_seen: moment() },
+      //{ where: { id: rawData.uid }, defaults: { id: rawData.uid } }
+      //);
       //}
       //catch (err) {
-        //console.warn(err);
-        //console.log(rawData);
+      //console.warn(err);
+      //console.log(rawData);
       //}
 
       //if (messageUser.role < ROLE.BOUNCER) {
-        if (/(skip)/ig.test(rawData.message)) {
-          await bot.delete(rawData.id);
-          return;
-        }
+      if (/(skip)/ig.test(rawData.message)) {
+        await bot.delete(rawData.id);
+        return;
+      }
       //}
 
       if (/(skip pls)|(pls skip)|(skip this shit)|(mods skip this)|(faggot)|(socket app)/ig.test(rawData.message)) {
@@ -129,8 +129,9 @@ module.exports = function Event(bot, platform) {
         setTimeout(async () => await bot.delete(rawData.id), 3e5);
       }
 
+      const botID = await bot.getSelf();
       if (!commandHandleRegex.test(rawData.message)) {
-        if (rawData.uid !== await bot.getSelf()._id) {
+        if (rawData.uid !== botID._id) {
           bot.channels.cache.get("695987344280649839").send(rawData.un + ": " + rawData.message.replace("@", ""));
         }
       }
@@ -138,7 +139,7 @@ module.exports = function Event(bot, platform) {
       if (!commandHandleRegex.test(rawData.message)) {
         if (isNil(bot.lottery.timer)) return;
         if (bot.lottery.timer.isStarted) {
-          if (rawData.uid !== await bot.getSelf()._id) {
+          if (rawData.uid !== botID._id) {
             if (moment().valueOf() > bot.lottery.canJoinDate.valueOf()) {
               bot.lottery.add(rawData.uid);
             }

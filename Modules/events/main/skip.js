@@ -11,7 +11,8 @@ module.exports = function Event(bot, filename, platform) {
       
       if (isNil(moderator)) return;
 
-      if (moderator.id === await bot.getSelf()._id) return;
+      const botID = await bot.getSelf();
+      if (moderator.id === botID._id) return;
 
       await bot.getRoomHistory().then(async (history) => {
         var skippedSong = history;

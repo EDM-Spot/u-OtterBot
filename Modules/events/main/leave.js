@@ -7,8 +7,9 @@ module.exports = function Event(bot, platform) {
     platform,
     run: async (userID) => {
       const user = await bot.getUser(userID);
+      const botID = await bot.getSelf();
 
-      if (isNil(user.username) || userID === await bot.getSelf()._id) return;
+      if (isNil(user.username) || userID === botID._id) return;
 
       //try {
         //await bot.db.models.users.update(

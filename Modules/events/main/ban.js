@@ -20,7 +20,8 @@ module.exports = function Event(bot, platform) {
         //duration: data.duration,
       //});
 
-      if (data.moderatorID === await bot.getSelf()._id) return;
+      const botID = await bot.getSelf();
+      if (data.moderatorID === botID._id) return;
 
       const user = await bot.getUser(data.userID);
       const moderator = await bot.getUser(data.moderatorID);

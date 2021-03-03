@@ -22,7 +22,8 @@ module.exports = function Event(bot, filename, platform) {
         return;
       }
 
-      await bot.joinWaitlist(await bot.getSelf()._id);
+      const botID = await bot.getSelf();
+      await bot.joinWaitlist(botID._id);
 
       let songAuthor = null;
       let songTitle = null;
@@ -117,7 +118,7 @@ module.exports = function Event(bot, filename, platform) {
               .setAuthor(currentPlay.artist + " - " + currentPlay.title, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
               .setColor(0xFF00FF)
               //.setDescription("This is the main body of text, it can hold 2048 characters.")
-              .setFooter("By " + await bot.getSelf().username)
+              .setFooter("By " + botID.username)
               //.setImage("http://i.imgur.com/yVpymuV.png")
               //.setThumbnail("http://i.imgur.com/p2qNFag.png")
               .setTimestamp()

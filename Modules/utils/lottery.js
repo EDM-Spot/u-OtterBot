@@ -88,7 +88,8 @@ module.exports = function Util(bot) {
         return;
       }
 
-      await bot.redis.removeGivePosition(await bot.getSelf()._id, user._id);
+      const botID = await bot.getSelf();
+      await bot.redis.removeGivePosition(botID._id, user._id);
 
       bot.chat(bot.utils.replace(bot.lang.lotteryWinner, {
         winner: user.username,
@@ -96,11 +97,11 @@ module.exports = function Util(bot) {
       }));
 
       //bot.queue.add(user, position);
-      await bot.redis.registerGivePosition(await bot.getSelf()._id, user._id, position);
+      await bot.redis.registerGivePosition(botID._id, user._id, position);
 
       this.giveTimer = moment.duration(3, "minutes").timer({loop: false, start: true}, async () => {
         bot.chat(bot.lang.notAccepted);
-        bot.redis.removeGivePosition(await bot.getSelf()._id, user._id);
+        bot.redis.removeGivePosition(botID._id, user._id);
         this.winner(players.filter(player => player !== winner));
       }, (120000));
     

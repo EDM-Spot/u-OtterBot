@@ -7,7 +7,8 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (data) => {
-      if (data._id !== await bot.getSelf()._id) return;
+      const botID = await bot.getSelf();
+      if (data._id !== botID._id) return;
 
       bot.chat(bot.lang.startup);
 

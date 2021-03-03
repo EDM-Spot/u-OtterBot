@@ -155,19 +155,19 @@ class Bot extends Discord.Client {
   }
 
   async getSelf() {
-    const body = await axios.get(`${API_URL}/now`);
+    const body = await axios.get(`${API_URL}/now`).catch(function(error) { console.log(error); });
 
     return body.data.user;
   }
 
   async getUsers() {
-    const body = await axios.get(`${API_URL}/now`);
+    const body = await axios.get(`${API_URL}/now`).catch(function(error) { console.log(error); });
 
     return body.data.users;
   }
 
   async getUser(id) {
-    const body = await axios.get(`${API_URL}/users/${id}`);
+    const body = await axios.get(`${API_URL}/users/${id}`).catch(function(error) { console.log(error); });
 
     return body.data.data;
   }
@@ -179,7 +179,7 @@ class Bot extends Discord.Client {
   }
 
   async getDj() {
-    const body = await axios.get(`${API_URL}/booth`);
+    const body = await axios.get(`${API_URL}/booth`).catch(function(error) { console.log(error); });
     const user = await this.getUser(body.data.data.userID);
 
     body.data.data.media.user = user;
@@ -192,7 +192,7 @@ class Bot extends Discord.Client {
   }
 
   async getWaitlist() {
-    const body = await axios.get(`${API_URL}/waitlist`);
+    const body = await axios.get(`${API_URL}/waitlist`).catch(function(error) { console.log(error); });
 
     return body.data.data;
   }
@@ -204,7 +204,7 @@ class Bot extends Discord.Client {
   }
 
   async delete(id) {
-    return await axios.delete(`${API_URL}/chat/${id}`);
+    return await axios.delete(`${API_URL}/chat/${id}`).catch(function(error) { console.log(error); });
   }
 
   async skip(userID, reason) {
@@ -212,21 +212,25 @@ class Bot extends Discord.Client {
       userID,
       reason,
       remove: false
-    });
+    }).catch(function(error) { console.log(error); });
   }
 
   async joinWaitlist(id) {
     return await axios.post(`${API_URL}/waitlist`, {
       userID: id
-    });
+    }).catch(function(error) { console.log(error); });
   }
 
   async leaveWaitlist() {
-    return await axios.delete(`${API_URL}/waitlist/60247370d5cc5241eabcb1e7`);
+    return await axios.delete(`${API_URL}/waitlist`, {
+      data: {
+        id: "60247370d5cc5241eabcb1e7"
+      }
+    }).catch(function(error) { console.log(error); });
   }
 
   async getPlaylistItems() {
-    const body = await axios.get(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media?page[offset]=0&page[limit]=500`);
+    const body = await axios.get(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media?page[offset]=0&page[limit]=500`).catch(function(error) { console.log(error); });
 
     return body.data.data;
   }
@@ -236,34 +240,34 @@ class Bot extends Discord.Client {
       data: {
         items: currentList
       }
-    });
+    }).catch(function(error) { console.log(error); });
   }
 
   async insertMedia(item) {
     return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/media`, {
       items: item,
       at: "end"
-    });
+    }).catch(function(error) { console.log(error); });
   }
 
   async shufflePlaylist() {
-    return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/shuffle`);
+    return await axios.post(`${API_URL}/playlists/603eb8030e00b6dc1327dc5c/shuffle`).catch(function(error) { console.log(error); });
   }
 
   async getRoomHistory() {
-    const body = await axios.get(`${API_URL}/booth/history`);
+    const body = await axios.get(`${API_URL}/booth/history`).catch(function(error) { console.log(error); });
 
     return body.data.data;
   }
 
   async isLocked() {
-    const body = await axios.get(`${API_URL}/now`);
+    const body = await axios.get(`${API_URL}/now`).catch(function(error) { console.log(error); });
 
     return body.data.waitlistLocked;
   }
 
   async setLock() {
-    return await axios.get(`${API_URL}/waitlist/lock`);
+    return await axios.get(`${API_URL}/waitlist/lock`).catch(function(error) { console.log(error); });
   }
 
   /*
