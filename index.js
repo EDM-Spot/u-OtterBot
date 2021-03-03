@@ -215,10 +215,10 @@ class Bot extends Discord.Client {
     }).catch(function(error) { console.log(error); });
   }
 
-  async joinWaitlist(id) {
+  async joinWaitlist(userID) {
     return await axios.post(`${API_URL}/waitlist`, {
-      userID: id
-    }).catch(function(error) { console.log(error); });
+      userID
+    });
   }
 
   async leaveWaitlist() {

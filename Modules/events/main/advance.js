@@ -23,7 +23,11 @@ module.exports = function Event(bot, filename, platform) {
       }
 
       const botID = await bot.getSelf();
-      await bot.joinWaitlist(botID._id);
+      try {
+        await bot.joinWaitlist(botID._id);
+      } catch (err) {
+        //err
+      }
 
       let songAuthor = null;
       let songTitle = null;
@@ -77,7 +81,7 @@ module.exports = function Event(bot, filename, platform) {
         if (!isNil(bot.user)) {
           bot.user.setActivity(`${songAuthor} - ${songTitle}`, {
             type: "LISTENING"
-          }).catch(function(error) {
+          }).catch(function (error) {
             console.warn("setActivity Error!");
             console.log(error);
           });
@@ -106,11 +110,11 @@ module.exports = function Event(bot, filename, platform) {
 
           if (!skipped) {
             //await bot.db.models.blacklist.findOrCreate({
-              //where: { cid: currentPlay.cid },
-              //defaults: {
-                //cid: currentPlay.cid,
-                //moderator: bot.plug.me().id,
-              //},
+            //where: { cid: currentPlay.cid },
+            //defaults: {
+            //cid: currentPlay.cid,
+            //moderator: bot.plug.me().id,
+            //},
             //});
 
             const embed = new Discord.MessageEmbed()
@@ -148,27 +152,27 @@ module.exports = function Event(bot, filename, platform) {
       //const blacklisted = await bot.db.models.blacklist.findOne({ where: { cid: currentPlay.cid } });
 
       //if (isObject(blacklisted)) {
-        //if (!skipped) {
-          //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
+      //if (!skipped) {
+      //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
-          //bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.blacklisted);
+      //bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.blacklisted);
 
-          //await next.skip();
-          //skipped = true;
-        //}
+      //await next.skip();
+      //skipped = true;
+      //}
       //}
 
       //const isOverplayed = await bot.utils.isSongOverPlayed(songAuthor, songTitle, currentPlay.cid);
 
       //if (isOverplayed) {
-        //if (!skipped) {
-          //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
+      //if (!skipped) {
+      //bot.plug.chat(`@${currentDJ.username} ` + bot.lang.overplayed);
 
-          //bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.overplayed);
+      //bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.overplayed);
 
-          //await next.skip();
-          //skipped = true;
-        //}
+      //await next.skip();
+      //skipped = true;
+      //}
       //}
 
       if (isObject(currentDJ) && currentPlay.duration >= 390) {
@@ -179,20 +183,20 @@ module.exports = function Event(bot, filename, platform) {
         //const propsToPay = Math.ceil(seconds / 3);
 
         //if (currentPlay.duration <= 600 && props >= propsToPay) {
-          //await user.decrement("props", { by: propsToPay });
-          //bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
+        //await user.decrement("props", { by: propsToPay });
+        //bot.plug.chat(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
 
-          //bot.channels.cache.get("695987344280649839").send(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
+        //bot.channels.cache.get("695987344280649839").send(`${currentDJ.username} paid ${propsToPay} Props to play this song!`);
         //} else {
-          if (!skipped) {
-            bot.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
+        if (!skipped) {
+          bot.chat(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
 
-            bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
+          bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
 
-            //await bot.utils.lockskip(currentDJ);
-            await bot.skip(next.userID, "duration");
-            skipped = true;
-          }
+          //await bot.utils.lockskip(currentDJ);
+          await bot.skip(next.userID, "duration");
+          skipped = true;
+        }
         //}
       }
 
@@ -233,20 +237,20 @@ module.exports = function Event(bot, filename, platform) {
       //const savedID = currentPlay._id;
 
       //setTimeout(async () => {
-        //const timeoutMedia = bot.plug.historyEntry();
+      //const timeoutMedia = bot.plug.historyEntry();
 
-        //if (savedID === get(timeoutMedia.media, "id")) {
-          //if (!skipped) {
-            //bot.plug.chat(bot.lang.stuckSkip);
+      //if (savedID === get(timeoutMedia.media, "id")) {
+      //if (!skipped) {
+      //bot.plug.chat(bot.lang.stuckSkip);
 
-            //bot.channels.cache.get("695987344280649839").send(bot.lang.stuckSkip);
+      //bot.channels.cache.get("695987344280649839").send(bot.lang.stuckSkip);
 
-            //bot.global.isSkippedByTimeGuard = true;
+      //bot.global.isSkippedByTimeGuard = true;
 
-            //await timeoutMedia.skip();
-            //skipped = true;
-          //}
-        //}
+      //await timeoutMedia.skip();
+      //skipped = true;
+      //}
+      //}
       //}, (currentPlay.duration + 10) * 1e3);
 
       try {
@@ -267,12 +271,12 @@ module.exports = function Event(bot, filename, platform) {
         if (!isObject(lastPlay)) return;
 
         //const lastSaved = await bot.db.models.plays.findAll({
-          //order: [["id", "DESC"]],
-          //limit: 1,
+        //order: [["id", "DESC"]],
+        //limit: 1,
         //});
 
         //if (!isNil(lastSaved)) {
-          //if (lastSaved[0].cid === lastPlay.cid) return;
+        //if (lastSaved[0].cid === lastPlay.cid) return;
         //}
 
         //const [lastPlay] = history;
@@ -330,25 +334,25 @@ module.exports = function Event(bot, filename, platform) {
 
         // keep track of played media in the room
         //await bot.db.models.plays.create({
-          //cid: lastPlay.cid,
-          //format: lastPlay.format,
-          //woots: history.score.positive,
-          //grabs: history.score.grabs,
-          //mehs: history.score.negative,
-          //dj: lastDJ.id,
-          //skipped: lastPlaySkipped > 0,
-          //author: `${lastSongAuthor}`,
-          //title: `${lastSongTitle}`,
+        //cid: lastPlay.cid,
+        //format: lastPlay.format,
+        //woots: history.score.positive,
+        //grabs: history.score.grabs,
+        //mehs: history.score.negative,
+        //dj: lastDJ.id,
+        //skipped: lastPlaySkipped > 0,
+        //author: `${lastSongAuthor}`,
+        //title: `${lastSongTitle}`,
         //});
 
         // count how many props were given while that media played
         //const props = await bot.db.models.props.count({
-          //where: { historyID: `${history.id}`, dj: lastDJ.id },
+        //where: { historyID: `${history.id}`, dj: lastDJ.id },
         //});
 
         // get an user object for the last DJ
         //const [instance] = await bot.db.models.users.findOrCreate({
-          //where: { id: lastDJ.id }, defaults: { id: lastDJ.id, username: lastDJ.username },
+        //where: { id: lastDJ.id }, defaults: { id: lastDJ.id, username: lastDJ.username },
         //});
 
         const woots = history.stats.upvotes.length;
@@ -426,35 +430,35 @@ module.exports = function Event(bot, filename, platform) {
           if (bot.global.isSkippedByMehGuard) {
             bot.global.isSkippedByMehGuard = false;
           } //else {
-            // otherwise, give them the props
-            //await instance.increment("props", { by: props });
+          // otherwise, give them the props
+          //await instance.increment("props", { by: props });
 
-            //bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
-              //props,
-              //user: lastDJ.username,
-              //plural: props > 1 ? "s" : "",
-            //}));
+          //bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
+          //props,
+          //user: lastDJ.username,
+          //plural: props > 1 ? "s" : "",
+          //}));
 
-            //bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.advanceprops, {
-              //props,
-              //user: lastDJ.username,
-              //plural: props > 1 ? "s" : "",
-            //}));
+          //bot.channels.cache.get("695987344280649839").send(bot.utils.replace(bot.lang.advanceprops, {
+          //props,
+          //user: lastDJ.username,
+          //plural: props > 1 ? "s" : "",
+          //}));
           //}
 
           //Xmas
           //const cooldown = await bot.redis.getCommandOnCoolDown("plug", "song@play", "perUser", lastDJ.id);
 
           //if (cooldown === -2) {
-            //await instance.increment("props", { by: 100 });
+          //await instance.increment("props", { by: 100 });
 
-            //bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
-              //props: 100,
-              //user: lastDJ.username,
-              //plural: 100 > 1 ? "s" : "",
-            //}));
-            
-            //await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 864000);
+          //bot.plug.chat(bot.utils.replace(bot.lang.advanceprops, {
+          //props: 100,
+          //user: lastDJ.username,
+          //plural: 100 > 1 ? "s" : "",
+          //}));
+
+          //await bot.redis.placeCommandOnCooldown("plug", "song@play", "perUser", lastDJ.id, 864000);
           //}
         }
 
@@ -462,7 +466,7 @@ module.exports = function Event(bot, filename, platform) {
         bot.global.ignoreHistoryNext = false;
 
         //if (lastDJ.id !== bot.plug.me().id) {
-          //await bot.utils.updateRDJ(lastDJ.id);
+        //await bot.utils.updateRDJ(lastDJ.id);
         //}
       } catch (err) {
         console.warn("advance Error!");

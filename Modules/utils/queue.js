@@ -79,9 +79,9 @@ module.exports = function Util(bot) {
       if (!isNil(dj) && dj._id === next.user._id) {
         this.users.push(next);
         return;
-      } else if (waitlist.positionOf(next.user._id) === -1) {
+      } else if (await bot.getWaitlistPos(next.user._id) === -1) {
         try {
-          await next.user.add();
+          await bot.joinWaitlist(next.user._id);
         } catch (err) {
           if (get(err, "response.body.status")) {
             switch (get(err, "response.body.status")) {
