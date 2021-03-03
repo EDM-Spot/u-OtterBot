@@ -9,9 +9,6 @@ module.exports = function Event(bot, filename, platform) {
     run: async (data) => {
       if (data._id !== await bot.getSelf()._id) return;
 
-      // Following the same reason to wait here as discord ready 
-      await bot.wait(2000);
-
       bot.chat(bot.lang.startup);
 
       //const user = bot.plug.users();
