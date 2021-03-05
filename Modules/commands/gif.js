@@ -36,7 +36,9 @@ module.exports = function Command(bot) {
 
       if (isNil(gif.data[randomNumb])) return false;
 
-      this.reply(lang.gif, { url: gif.data[randomNumb].images.downsized.url });
+      this.reply(lang.gif, { url: "" });
+      bot.chat(gif.data[randomNumb].images.downsized.url);
+      
       return true;
     },
   });
