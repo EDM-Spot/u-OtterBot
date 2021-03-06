@@ -18,6 +18,8 @@ module.exports = function Event(bot, filename, platform) {
       var currentPlay = next.media.media;
       var currentDJ = await bot.getUser(next.userID);
 
+      const botID = await bot.getSelf();
+
       if (isNil(currentDJ._id) || isNil(currentDJ.username)) {
         return;
       }
@@ -208,6 +210,7 @@ module.exports = function Event(bot, filename, platform) {
                   time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
                 }));
 
+                console.log("Skipped " + skipped);
                 await bot.skip(next.userID, "history");
                 skipped = true;
               }

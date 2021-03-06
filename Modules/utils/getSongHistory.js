@@ -26,27 +26,27 @@ module.exports = function Util(bot) {
             const savedTitle = songHistory[i].media.title.replace(/ *\([^)]*\) */g, "").replace(/\[.*?\]/g, "").trim();
 
             if (playedMinutes <= 360) {
-              if (songHistory[i].media.sourceID === sourceID) {
+              //if (songHistory[i].media.sourceID === sourceID) {
                 // Song Played | Same ID
-                return { songHistory: songHistory[i], maybe: false, skip: true };
-              }
+                //return { songHistory: songHistory[i], maybe: false, skip: true };
+              //}
 
-              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (songHistory[i].media.sourceID !== sourceID)) {
+              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor)) { //&& (songHistory[i].media.sourceID !== sourceID)) {
                 // Same Song | Diff sourceID | Diff Remix/Channel
                 return { songHistory: songHistory[i], maybe: false, skip: true };
               }
 
-              if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor) && (songHistory[i].media.sourceID !== sourceID)) {
+              if ((savedTitle === currentTitle) && (savedAuthor !== currentAuthor)) { //&& (songHistory[i].media.sourceID !== sourceID)) {
                 // Same Song Name/Maybe diff Author
                 return { songHistory: songHistory[i], maybe: true, skip: true };
               }
             } else {
-              if (songHistory[i].media.sourceID === sourceID) {
+              //if (songHistory[i].media.sourceID === sourceID) {
                 // Song Played | Same ID
-                return { songHistory: songHistory[i], maybe: false, skip: false };
-              }
+                //return { songHistory: songHistory[i], maybe: false, skip: false };
+              //}
 
-              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor) && (songHistory[i].media.sourceID !== sourceID)) {
+              if ((savedTitle === currentTitle) && (savedAuthor === currentAuthor)) { //&& (songHistory[i].media.sourceID !== sourceID)) {
                 // Same Song | Diff sourceID | Diff Remix/Channel
                 return { songHistory: songHistory[i], maybe: false, skip: false };
               }
