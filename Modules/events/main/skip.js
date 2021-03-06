@@ -1,4 +1,4 @@
-const { isObject, isNil } = require("lodash");
+const { isNil } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Event(bot, filename, platform) {
@@ -7,6 +7,8 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (moderatorID, userID, reason) => {
+      console.log(moderatorID);
+      console.log(userID);
       const moderator = await bot.getUser(moderatorID);
       
       if (isNil(moderator)) return;
