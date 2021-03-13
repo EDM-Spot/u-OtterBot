@@ -59,7 +59,7 @@ module.exports = function Util(bot) {
       ];
 
       const d = new Date();
-      d.setDate(d.getDate() - 14);
+      d.setDate(d.getDate() - 30);
 
       each(channels, async (channel) => {
         await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channel}&maxResults=30&order=date&publishedAfter=${d.toISOString()}&fields=items(id(videoId),snippet(channelId,channelTitle,title,thumbnails(default(url))))&key=${this.key}`)
