@@ -188,13 +188,11 @@ module.exports = function Event(bot, filename, platform) {
 
           bot.channels.cache.get("695987344280649839").send(`@${currentDJ.username} ` + bot.lang.exceedstimeguard);
 
-          console.log("Skipped exceedstimeguard " + skipped);
+          console.log(currentPlay.sourceID);
 
           //await bot.utils.lockskip(currentDJ);
           await bot.skip(next.userID, "duration");
           skipped = true;
-
-          console.log("Skipped exceedstimeguard " + skipped);
         }
         //}
       }
@@ -214,12 +212,10 @@ module.exports = function Event(bot, filename, platform) {
                   time: bot.moment(map(songHistory, "playedAt")[0]).fromNow(),
                 }));
 
-                console.log("Skipped songHistory " + skipped);
+                console.log(currentPlay.sourceID);
 
                 await bot.skip(next.userID, "history");
                 skipped = true;
-
-                console.log("Skipped songHistory " + skipped);
               }
             } else {
               bot.chat(bot.utils.replace(bot.lang.maybeHistorySkip, {

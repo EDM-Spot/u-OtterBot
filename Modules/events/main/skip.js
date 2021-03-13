@@ -7,7 +7,7 @@ module.exports = function Event(bot, filename, platform) {
     platform,
     _filename: filename,
     run: async (moderatorID, userID, reason) => {
-      if (isNil(moderatorID) || isNil(userID)) return;
+      if (isNil(moderatorID)) return;
 
       const moderator = await bot.getUser(moderatorID);
       
