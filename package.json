@@ -41,7 +41,7 @@
     "moment-duration-format": "2.3.2",
     "moment-random": "1.1.0",
     "moment-timer": "git+ssh://git@github.com/PrincessRTFM/moment-timer.git#instant-call-base",
-    "mongoose": "5.11.18",
+    "mongoose": "5.12.0",
     "node-fetch": "2.6.1",
     "pokersolver": "2.1.4",
     "qs": "6.9.6",
@@ -50,11 +50,11 @@
     "request-promise": "4.2.6",
     "slot-machine": "2.1.0",
     "sodium": "3.0.2",
-    "ws": "^7.4.3",
+    "ws": "^7.4.4",
     "ytdl-core-discord": "1.2.5"
   },
   "devDependencies": {
-    "eslint": "7.21.0",
+    "eslint": "7.22.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-react": "7.22.0"
   }
