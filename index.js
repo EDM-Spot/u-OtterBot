@@ -99,7 +99,7 @@ class Bot extends Discord.Client {
           const reconnect = once(() => {
             console.log("reconnecting in 1000ms");
             setTimeout(() => {
-              this.connect();
+              this.connectSocket();
             }, 1000);
           });
 
