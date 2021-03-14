@@ -83,6 +83,7 @@ module.exports = function Util(bot) {
     }
     add(id) {
       if (!this.players.includes(id)) {
+        console.log(id);
         this.players.push(id);
         return true;
       }

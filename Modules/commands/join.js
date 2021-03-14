@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isNil } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.botCommands.register({
@@ -18,7 +18,7 @@ module.exports = function Command(bot) {
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {});
         return true;
-      } else if (isObject(dj) && dj._id === rawData.uid) {
+      } else if (!isNil(dj) && dj._id === rawData.uid) {
         this.reply(lang.join.isPlaying, {});
         return true;
       } else if (waitlist.includes(rawData.uid) && pos <= 4) {
