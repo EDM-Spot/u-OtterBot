@@ -13,18 +13,22 @@ module.exports = function Command(bot) {
       const dj = await bot.getDj();
       const waitlist = await bot.getWaitlist();
       
+      const pos = await bot.getWaitlistPos(rawData.uid);
+      console.log(pos);
+      
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {});
         return true;
       } else if (isObject(dj) && dj._id === rawData.uid) {
         this.reply(lang.join.isPlaying, {});
         return true;
-      } else if (waitlist.includes(rawData.uid) && await bot.getWaitlistPos(rawData.uid) <= 4) {
+      } else if (waitlist.includes(rawData.uid) && pos <= 5) {
         this.reply(lang.join.closeToPlaying, {});
         return true;
       }
 
       const { uid: id } = rawData;
+      console.log(id);
 
       if (bot.roulette.running) {
         if (bot.roulette.players.includes(id)) return true;
@@ -43,6 +47,7 @@ module.exports = function Command(bot) {
           //await bot.db.models.users.increment("props", { by: bot.roulette.price, where: { id: "40333310" } });
         //}
         
+        console.log(id);
         bot.roulette.add(id);
         return true;
       }
