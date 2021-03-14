@@ -200,7 +200,7 @@ class Bot extends Discord.Client {
   async getWaitlistPos(id) {
     const waitlist = await this.getWaitlist();
 
-    return waitlist.findIndex(id => id === id);
+    return waitlist.findIndex(x => x === id);
   }
 
   async delete(id) {
