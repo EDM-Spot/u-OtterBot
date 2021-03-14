@@ -1,4 +1,4 @@
-const { each, isObject } = require("lodash");
+const { each, isObject, isNil } = require("lodash");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
@@ -113,7 +113,15 @@ module.exports = function Util(bot) {
       return isIn ? (inside[players] || 2) : (outside[players] || 3);
     }
     async winner(players) {
+      console.log(players);
       const winner = players[Math.floor(Math.random() * players.length)];
+      console.log(winner);
+
+      if (isNil(winner)) {
+        this.winner(players.filter(player => player !== winner));
+        return;
+      }
+
       const user = await bot.getUser(winner);
       const waitlist = await bot.getWaitlist();
 

@@ -167,9 +167,7 @@ class Bot extends Discord.Client {
   }
 
   async getUser(id) {
-    console.log(id);
     const body = await axios.get(`${API_URL}/users/${id}`).catch(function(error) { console.log(error); });
-    console.log(body.data);
 
     return body.data.data;
   }
