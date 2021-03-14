@@ -75,15 +75,16 @@ module.exports = function Util(bot) {
 
       const randomBool = Math.random() >= 0.5;
 
-      const luckyshot = Math.floor(Math.random() * (await bot.getWaitlistPos(victim) - 5)) + 5;
-      const unluckyshot = Math.floor(Math.random() * (waitlist.length - await bot.getWaitlistPos(victim)) + await bot.getWaitlistPos(victim) + 1);
+      const pos = await bot.getWaitlistPos(victim);
+      const luckyshot = Math.floor(Math.random() * (pos - 5)) + 5;
+      const unluckyshot = Math.floor(Math.random() * (waitlist.length - pos) + pos + 1);
 
       if (randomBool) {
         bot.chat(bot.utils.replace(bot.lang.russianroulette.luckyshot, {
           user: user.username,
         }));
 
-        if (await bot.getWaitlistPos(victim) === -1) {
+        if (pos === -1) {
           bot.queue.add(user, waitlist.length);
 
           this.chooseVictim(players.filter(player => player !== victim));
@@ -96,7 +97,7 @@ module.exports = function Util(bot) {
           user: user.username,
         }));
 
-        if (await bot.getWaitlistPos(victim) === -1) {
+        if (pos === -1) {
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }

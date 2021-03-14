@@ -50,7 +50,9 @@ module.exports = function Util(bot) {
 
       if (!this.users.length) {
         if (this.shouldUnlock) {
-          if (await bot.isLocked()) {
+          const isLocked = await bot.isLocked();
+
+          if (isLocked) {
             await bot.setLock(); //false
           }
           this.shouldUnlock = false;
@@ -62,7 +64,8 @@ module.exports = function Util(bot) {
       const next = this.users.shift();
 
       if (waitlist.length === 50 && !waitlist.contains(next.user._id)) {
-        if (!await bot.isLocked()) {
+        const isLocked = await bot.isLocked();
+        if (!isLocked) {
           try {
             await bot.setLock(); // true
             this.shouldUnlock = true;
@@ -76,10 +79,12 @@ module.exports = function Util(bot) {
         }
       }
 
+      const pos = await bot.getWaitlistPos(next.user._id);
+
       if (!isNil(dj) && dj._id === next.user._id) {
         this.users.push(next);
         return;
-      } else if (await bot.getWaitlistPos(next.user._id) === -1) {
+      } else if (pos === -1) {
         try {
           await bot.joinWaitlist(next.user._id);
         } catch (err) {
@@ -119,7 +124,8 @@ module.exports = function Util(bot) {
         }
 
         if (this.shouldUnlock) {
-          if (await bot.isLocked()) {
+          const isLocked = await bot.isLocked();
+          if (isLocked) {
             await bot.setLock(); //false
           }
           this.shouldUnlock = false;
@@ -127,7 +133,8 @@ module.exports = function Util(bot) {
       }
 
       if (this.shouldUnlock) {
-        if (await bot.isLocked()) {
+        const isLocked = await bot.isLocked();
+        if (isLocked) {
           await bot.setLock(); //false
         }
         this.shouldUnlock = false;

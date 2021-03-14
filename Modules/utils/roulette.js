@@ -113,15 +113,7 @@ module.exports = function Util(bot) {
       return isIn ? (inside[players] || 2) : (outside[players] || 3);
     }
     async winner(players) {
-      console.log(players);
       const winner = players[Math.floor(Math.random() * players.length)];
-      console.log(winner);
-
-      if (isNil(winner)) {
-        this.winner(players.filter(player => player !== winner));
-        return;
-      }
-
       const user = await bot.getUser(winner);
       const waitlist = await bot.getWaitlist();
 
@@ -130,7 +122,8 @@ module.exports = function Util(bot) {
         return;
       }
 
-      const position = this.constructor.position(await bot.getWaitlistPos(winner), waitlist.length);
+      const userPos = await bot.getWaitlistPos(winner);
+      const position = this.constructor.position(userPos, waitlist.length);
 
       if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
         this.winner(players.filter(player => player !== winner));
@@ -175,8 +168,12 @@ module.exports = function Util(bot) {
       const alteredOdds = [];
 
       each(this.players, async (player) => {
-        if (await bot.getUser(player)) {
-          if (await bot.getWaitlistPos(player) === -1) {
+        const user = await bot.getUser(player);
+        const pos = await bot.getWaitlistPos(player);
+        console.log(pos);
+
+        if (!isNil(user)) {
+          if (pos === -1) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
