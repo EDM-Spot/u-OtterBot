@@ -12,7 +12,7 @@ module.exports = function Command(bot) {
     async execute(rawData, command, lang) { // eslint-disable-line no-unused-vars
       const dj = await bot.getDj();
       const waitlist = await bot.getWaitlist();
-      
+
       const pos = await bot.getWaitlistPos(rawData.uid);
       console.log(pos);
       
@@ -28,7 +28,6 @@ module.exports = function Command(bot) {
       }
 
       const { uid: id } = rawData;
-      console.log(id);
 
       if (bot.roulette.running) {
         if (bot.roulette.players.includes(id)) return true;
@@ -46,8 +45,7 @@ module.exports = function Command(bot) {
           //await inst.decrement("props", { by: bot.roulette.price });
           //await bot.db.models.users.increment("props", { by: bot.roulette.price, where: { id: "40333310" } });
         //}
-        
-        console.log(id);
+
         bot.roulette.add(id);
         return true;
       }
