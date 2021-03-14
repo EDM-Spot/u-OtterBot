@@ -93,7 +93,7 @@ module.exports = function Util(bot) {
     static position(currentPosition, waitlistLength) {
       // the highest position you can go to is 5
       // users outside the list have a chance to get at least pos 35
-      return currentPosition !== -1 ?
+      return !isNil(currentPosition) ?
         Math.floor(Math.random() * (currentPosition - 5)) + 5 :
         Math.floor(Math.random() * Math.min(waitlistLength, 35)) + 5;
     }
@@ -114,6 +114,9 @@ module.exports = function Util(bot) {
       return isIn ? (inside[players] || 2) : (outside[players] || 3);
     }
     async winner(players) {
+      console.log("//WINNERS");
+      console.log(players);
+
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = await bot.getUser(winner);
       const waitlist = await bot.getWaitlist();
@@ -181,6 +184,7 @@ module.exports = function Util(bot) {
         }
       });
 
+      console.log(alteredOdds);
       return this.winner(alteredOdds);
     }
   }
