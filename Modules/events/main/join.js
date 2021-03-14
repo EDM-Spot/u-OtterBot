@@ -29,11 +29,12 @@ module.exports = function Event(bot, platform) {
       if (isNil(position) || isNaN(position))	return;
 
       const waitlist = await bot.getWaitlist();
+      const pos = await bot.getWaitlistPos(data._id);
       
       if (waitlist.length <= position && !waitlist.contains(data._id)) {
         bot.chat(`@${data.username} ` + bot.lang.commands.dc.waitlistSmaller);
         bot.queue.add(data, waitlist.length + 1);
-      } else if (waitlist.contains(data._id) && await bot.getWaitlistPos(data._id) <= position) {
+      } else if (waitlist.contains(data._id) && pos <= position) {
         bot.chat(`@${data.username} ` + bot.lang.commands.dc.sameOrLower);
       } else {
         bot.queue.add(data, position);

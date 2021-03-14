@@ -1,5 +1,5 @@
 const Command = require("../base/Command.js");
-const { isObject } = require("lodash");
+const { isObject, isNil } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 
@@ -40,19 +40,19 @@ class TriviaPay extends Command {
         return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
       }
 
-      const dj = this.client.getDj();
+      const dj = await this.client.getDj();
 
-      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         return message.reply("You're not online!");
       }
 
-      const userPos = this.client.getWaitlistPos(user._id);
+      const userPos = await this.client.getWaitlistPos(user._id);
 
       if (this.client.triviaUtil.started) {
         return message.reply("Trivia already started!");
       } else if (isObject(dj) && dj.user._id === user._id) {
         return message.reply("You can't join while playing!");
-      } else if (userPos >= 0 && userPos <= 5) {
+      } else if (userPos >= 1 && userPos <= 4) {
         return message.reply("You are too close to DJ.");
       }
 

@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isObject, isNil } = require("lodash");
 
 module.exports = function Util(bot) {
   class RussianRouletteUtil {
@@ -57,7 +57,7 @@ module.exports = function Util(bot) {
         return;
       }
 
-      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         bot.chat(bot.utils.replace(bot.lang.russianroulette.chicken, {
           user: victim,
         }));
@@ -84,7 +84,7 @@ module.exports = function Util(bot) {
           user: user.username,
         }));
 
-        if (pos === -1) {
+        if (isNil(pos)) {
           bot.queue.add(user, waitlist.length);
 
           this.chooseVictim(players.filter(player => player !== victim));
@@ -97,7 +97,7 @@ module.exports = function Util(bot) {
           user: user.username,
         }));
 
-        if (pos === -1) {
+        if (isNil(pos)) {
           this.chooseVictim(players.filter(player => player !== victim));
           return;
         }

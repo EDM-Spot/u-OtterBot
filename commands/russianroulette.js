@@ -1,6 +1,6 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/poker.js
 const Command = require("../base/Command.js");
-const { isNaN, isObject } = require("lodash");
+const { isNaN, isNil } = require("lodash");
 const moment = require("moment");
 require("moment-timer");
 
@@ -28,7 +28,7 @@ class DiscordRussianRoulette extends Command {
 
       const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (!isObject(user)) {
+      if (isNil(user)) {
         return message.reply("You need to link your account first! Read how here: http://prntscr.com/ls539m");
       }
 

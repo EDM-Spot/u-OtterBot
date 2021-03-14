@@ -84,7 +84,7 @@ module.exports = function Util(bot) {
       if (!isNil(dj) && dj._id === next.user._id) {
         this.users.push(next);
         return;
-      } else if (pos === -1) {
+      } else if (isNil(pos)) {
         try {
           await bot.joinWaitlist(next.user._id);
         } catch (err) {

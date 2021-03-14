@@ -1,7 +1,7 @@
 // Original Version https://github.com/1Computer1/kaado/blob/master/src/commands/games/slots.js
 const Command = require("../base/Command.js");
 const Discord = require("discord.js");
-const { isNaN, isObject } = require("lodash");
+const { isNaN, isObject, isNil } = require("lodash");
 const { SlotMachine, SlotSymbol } = require("slot-machine");
 
 const symbols = [
@@ -140,10 +140,10 @@ class Slots extends Command {
       //await inst.increment("props", { by: payout });
 
       if (moveTo3 || moveDown5 || moveDown2) {
-        const dj = this.client.getDj();
-        const userPos = this.client.getWaitlistPos(user.id);
+        const dj = await this.client.getDj();
+        const userPos = await this.client.getWaitlistPos(user.id);
 
-        if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+        if (isNil(user)) {
           message.reply("You're not online! Can't Move.");
         } else if (isObject(dj) && dj.user._id !== user._id) {
           if (moveTo3 && userPos >= 4) {

@@ -1,6 +1,6 @@
 const Command = require("../base/Command.js");
 const Discord = require("discord.js");
-const { isObject } = require("lodash");
+const { isNil } = require("lodash");
 const moment = require("moment");
 
 class Me extends Command {
@@ -23,7 +23,7 @@ class Me extends Command {
     try {
       const user = await this.client.getUserbyDiscord(message.author.id);
 
-      if (isObject(user)) {
+      if (!isNil(user)) {
 
         //await this.client.redis.placeCommandOnCooldown("discord", "me@info", "perUser", message.author.id, 3600);
 

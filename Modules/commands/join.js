@@ -14,7 +14,6 @@ module.exports = function Command(bot) {
       const waitlist = await bot.getWaitlist();
 
       const pos = await bot.getWaitlistPos(rawData.uid);
-      console.log(pos);
       
       if (!await bot.roulette.check() && !await bot.russianRoulette.check()) {
         this.reply(lang.join.noRoulette, {});
@@ -22,7 +21,7 @@ module.exports = function Command(bot) {
       } else if (isObject(dj) && dj._id === rawData.uid) {
         this.reply(lang.join.isPlaying, {});
         return true;
-      } else if (waitlist.includes(rawData.uid) && pos <= 5) {
+      } else if (waitlist.includes(rawData.uid) && pos <= 4) {
         this.reply(lang.join.closeToPlaying, {});
         return true;
       }

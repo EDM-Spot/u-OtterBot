@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isNil } = require("lodash");
 const Discord = require("discord.js");
 
 module.exports = function Command(bot) {
@@ -12,7 +12,7 @@ module.exports = function Command(bot) {
     async execute(rawData, { name }, lang) {
       const currentMedia = bot.getDj();
 
-      if (isObject(currentMedia)) {
+      if (!isNil(currentMedia)) {
         const botID = await bot.getSelf();
         await bot.skip(botID._id, "bot");
 

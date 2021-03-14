@@ -1,4 +1,4 @@
-const { each, isObject, isNil } = require("lodash");
+const { each, isNil } = require("lodash");
 const moment = require("moment");
 
 module.exports = function Util(bot) {
@@ -125,7 +125,7 @@ module.exports = function Util(bot) {
       const userPos = await bot.getWaitlistPos(winner);
       const position = this.constructor.position(userPos, waitlist.length);
 
-      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
@@ -170,10 +170,9 @@ module.exports = function Util(bot) {
       each(this.players, async (player) => {
         const user = await bot.getUser(player);
         const pos = await bot.getWaitlistPos(player);
-        console.log(pos);
 
         if (!isNil(user)) {
-          if (pos === -1) {
+          if (isNil(pos)) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
             alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));

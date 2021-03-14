@@ -1,4 +1,4 @@
-const { isObject } = require("lodash");
+const { isNil } = require("lodash");
 
 module.exports = function Command(bot) {
   bot.botCommands.register({
@@ -17,7 +17,7 @@ module.exports = function Command(bot) {
       const user = mentions[0];
       const user2 = mentions[1];
 
-      if (!isObject(user) || !isObject(user2)) {
+      if (isNil(user) || isNil(user2)) {
         this.reply(lang.userNotFound, {}, 6e4);
         return false;
       }
@@ -25,7 +25,7 @@ module.exports = function Command(bot) {
       const userPosition = await bot.getWaitlistPos(user._id);
       const user2Position = await bot.getWaitlistPos(user2._id);
 
-      if (userPosition < 1 || user2Position < 1) {
+      if (isNil(userPosition) || isNil(user2Position)) {
         this.reply(lang.give.notInList, {}, 6e4);
         return false;
       }

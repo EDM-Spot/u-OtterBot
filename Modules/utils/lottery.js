@@ -68,7 +68,7 @@ module.exports = function Util(bot) {
       const winner = players[Math.floor(Math.random() * players.length)];
       const user = await bot.getUser(winner);
 
-      if (!isObject(user) || typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
@@ -83,9 +83,9 @@ module.exports = function Util(bot) {
 
       const position = 5;
 
-      const userPos = bot.getWaitlistPos(user._id);
+      const userPos = await bot.getWaitlistPos(user._id);
 
-      if (userPos >= 0 && userPos <= 5) {
+      if (userPos >= 1 && userPos <= 5) {
         this.winner(players.filter(player => player !== winner));
         return;
       }
@@ -129,10 +129,10 @@ module.exports = function Util(bot) {
         const pos = await bot.getWaitlistPos(player);
         
         if (!isNil(user)) {
-          if (pos === -1) {
+          if (isNil(pos)) {
             alteredOdds.push(...Array(this.multiplier(this.players.length, false)).fill(player));
           } else {
-            if (pos > 6) {
+            if (pos > 5) {
               alteredOdds.push(...Array(this.multiplier(this.players.length, true)).fill(player));
             }
           }

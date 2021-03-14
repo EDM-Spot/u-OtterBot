@@ -132,11 +132,7 @@ module.exports = (client) => {
     async getUsername(discord) {
       const user = await this.client.getUserbyDiscord(discord);
   
-      if (!isObject(user)) {
-        return null;
-      }
-  
-      if (typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         return null;
       }
   
@@ -146,11 +142,7 @@ module.exports = (client) => {
     async moveWinner(discord) {
       const user = await this.client.getUserbyDiscord(discord);
   
-      if (isObject(user)) {
-        return null;
-      }
-  
-      if (typeof user.username !== "string" || !user.username.length) {
+      if (isNil(user)) {
         return null;
       }
 
