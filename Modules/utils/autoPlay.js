@@ -13,7 +13,7 @@ module.exports = function Util(bot) {
       waitsDone = 0;
       countWaits = 0;
 
-      await bot.leaveWaitlist();
+      //await bot.leaveWaitlist();
 
       const currentList = await bot.getPlaylistItems();
       const itemIDs = currentList.map((media) => media._id);
