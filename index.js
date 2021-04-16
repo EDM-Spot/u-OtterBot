@@ -24,8 +24,8 @@ const ModuleManager = require("./Modules");
 
 const Deck = require("./util/poker/deck.js");
 
-const API_URL = "https://edmspot.ml/api";
-const SOCKET_URL = "wss://edmspot.ml";
+const API_URL = "https://edmspot.net/api";
+const SOCKET_URL = "wss://edmspot.net";
 
 const AUTH_LOGIN = "auth/login";
 const AUTH_SOCKET = "auth/socket";
