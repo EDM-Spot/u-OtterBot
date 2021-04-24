@@ -50,7 +50,7 @@ class Slots extends Command {
       const user = await this.client.getUserbyDiscord(message.author.id);
 
       if (!isObject(user)) {
-        return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
+        return message.reply("You need to link your account first! Read how in the faq here: https://edmspot.net");
       }
 
       //const [inst] = await this.client.db.models.users.findOrCreate({ where: { id: userDB.get("id") }, defaults: { id: userDB.get("id") } });

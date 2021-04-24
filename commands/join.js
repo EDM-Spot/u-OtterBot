@@ -28,7 +28,7 @@ class Join extends Command {
       const user = await this.client.getUserbyDiscord(message.author.id);
 
       if (isNil(user)) {
-        return message.reply("You need to link your account first! Read how here: https://edmspot.ml/faq");
+        return message.reply("You need to link your account first! Read how in the faq here: https://edmspot.net");
       }
 
       const dj = await this.client.getDj();
