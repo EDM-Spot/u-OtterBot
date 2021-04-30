@@ -15,10 +15,17 @@ module.exports = function Util(bot) {
 
       //await bot.leaveWaitlist();
 
-      const currentList = await bot.getPlaylistItems();
-      const itemIDs = currentList.map((media) => media._id);
+      while (await bot.getPlaylistItems() != "[]") {
+        const currentList = await bot.getPlaylistItems();
+        const itemIDs = currentList.map((media) => media._id);
 
-      await bot.deletePlaylistItems(itemIDs);
+        await bot.deletePlaylistItems(itemIDs);
+      }
+
+      //const currentList = await bot.getPlaylistItems();
+      //const itemIDs = currentList.map((media) => media._id);
+
+      //await bot.deletePlaylistItems(itemIDs);
 
       /////////////////////////////////////////////////Channels
       //UCe55Gy-hFDvLZp8C8BZhBnw - NightBlue
@@ -101,7 +108,7 @@ module.exports = function Util(bot) {
       });
     }
     async addItem(item, a) {
-      setTimeout(async function() {
+      setTimeout(async function () {
         waitsDone++;
 
         console.log("Loaded " + waitsDone + " of " + countWaits);
