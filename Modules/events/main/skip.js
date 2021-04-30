@@ -6,10 +6,12 @@ module.exports = function Event(bot, filename, platform) {
     name: "skip",
     platform,
     _filename: filename,
-    run: async (moderatorID, userID, reason) => {
+    run: async (skip) => {
+      const { moderatorID, userID, reason } = skip;
+
       if (isNil(moderatorID)) return;
 
-      console.log(moderatorID);
+      console.log(skip);
       const moderator = await bot.getUser(moderatorID);
       
       if (isNil(moderator)) return;
