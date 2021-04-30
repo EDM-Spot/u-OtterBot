@@ -18,8 +18,6 @@ module.exports = function Util(bot) {
       const currentList = await bot.getPlaylistItems();
       const itemIDs = currentList.map((media) => media._id);
 
-      console.log(itemIDs);
-
       await bot.deletePlaylistItems(itemIDs);
 
       /////////////////////////////////////////////////Channels
@@ -91,7 +89,7 @@ module.exports = function Util(bot) {
                           thumbnail: video.snippet.thumbnails.default.url
                         }];
 
-                        await this.addItem(Item, countWaits * 500);
+                        await this.addItem(Item, countWaits * 50);
 
                         countWaits++;
                       }
