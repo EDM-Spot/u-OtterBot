@@ -10,8 +10,7 @@ module.exports = function Event(bot, filename, platform) {
       const { moderatorID, userID, reason } = skip;
 
       if (isNil(moderatorID)) return;
-
-      console.log(skip);
+      
       const moderator = await bot.getUser(moderatorID);
       
       if (isNil(moderator)) return;
@@ -23,6 +22,7 @@ module.exports = function Event(bot, filename, platform) {
         var skippedSong = history;
 
         if (isNil(skippedSong)) return;
+        console.log(skippedSong);
 
         const embed = new Discord.MessageEmbed()
           //.setTitle("Title")

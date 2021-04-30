@@ -18,6 +18,8 @@ module.exports = function Util(bot) {
       const currentList = await bot.getPlaylistItems();
       const itemIDs = currentList.map((media) => media._id);
 
+      console.log(itemIDs);
+
       await bot.deletePlaylistItems(itemIDs);
 
       /////////////////////////////////////////////////Channels
