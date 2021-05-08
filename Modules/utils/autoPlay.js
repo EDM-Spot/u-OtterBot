@@ -97,7 +97,7 @@ module.exports = function Util(bot) {
                           thumbnail: video.snippet.thumbnails.default.url
                         }];
 
-                        await this.addItem(Item, countWaits * 50);
+                        await this.addItem(Item, countWaits * 250);
 
                         countWaits++;
                       }
