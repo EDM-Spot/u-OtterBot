@@ -15,9 +15,10 @@ module.exports = function Util(bot) {
 
       //await bot.leaveWaitlist();
 
-      while (await bot.getPlaylistItems() != "[]") {
-        const currentList = await bot.getPlaylistItems();
-        const itemIDs = currentList.map((media) => media._id);
+      let plitems = await bot.getPlaylistItems();
+      while (plitems.length > 0) {
+        plitems = await bot.getPlaylistItems();
+        const itemIDs = plitems.map((media) => media._id);
 
         await bot.deletePlaylistItems(itemIDs);
       }
