@@ -22,11 +22,11 @@ module.exports = function Event(bot, filename, platform) {
         var skippedSong = history;
 
         if (isNil(skippedSong)) return;
-        console.log(skippedSong);
+        const user = await bot.getUser(skippedSong.user);
 
         const embed = new Discord.MessageEmbed()
           //.setTitle("Title")
-          .setAuthor(skippedSong.user.username, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
+          .setAuthor(user.username, "http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-8/64/Skip-forward-icon.png")
           .setColor(0xFF00FF)
           //.setDescription("This is the main body of text, it can hold 2048 characters.")
           .setFooter("By " + moderator.username)
@@ -34,8 +34,8 @@ module.exports = function Event(bot, filename, platform) {
           //.setThumbnail("http://i.imgur.com/p2qNFag.png")
           .setTimestamp()
           .addField("Reason ", reason, true)
-          .addField("ID", skippedSong.user.id, true)
-          .addField("Skipped", skippedSong.media.name + " (youtube.com/watch?v=" + skippedSong.media.sourceID + ")", false);
+          .addField("ID", user.id, true)
+          .addField("Skipped", skippedSong.media.artist + " - " + skippedSong.media.title + " (youtube.com/watch?v=" + skippedSong.media.sourceID + ")", false);
         //.addBlankField(true);
 
         bot.channels.cache.get("487985043776733185").send({ embed });
