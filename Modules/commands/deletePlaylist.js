@@ -7,10 +7,13 @@ module.exports = function Command(bot) {
     parameters: "",
     description: "Delete Bot Playlist.",
     async execute() {
-      const currentList = await bot.getPlaylistItems();
-      const itemIDs = currentList.map((media) => media._id);
+      let plitems = await bot.getPlaylistItems();
+      while (plitems.length > 0) {
+        plitems = await bot.getPlaylistItems();
+        const itemIDs = plitems.map((media) => media._id);
 
-      await bot.deletePlaylistItems(itemIDs);
+        await bot.deletePlaylistItems(itemIDs);
+      }
 
       return true;
     },
