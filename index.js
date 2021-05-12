@@ -15,6 +15,7 @@ const Enmap = require("enmap");
 const klaw = require("klaw");
 const path = require("path");
 const once = require("once");
+const rax = require("retry-axios");
 const axios = require("axios");
 const Redis = require("ioredis");
 const Mongoose = require("mongoose");
@@ -29,6 +30,8 @@ const SOCKET_URL = "wss://edmspot.net";
 
 const AUTH_LOGIN = "auth/login";
 const AUTH_SOCKET = "auth/socket";
+
+const interceptorId = rax.attach();
 
 class Bot extends Discord.Client {
   constructor(options) {
